@@ -6,6 +6,7 @@ import com.rickclephas.kmp.nativecoroutines.NativeCoroutineScope
 import com.mes.topdawg.common.di.TopDawgDatabaseWrapper
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
+import com.squareup.sqldelight.runtime.coroutines.mapToOne
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import org.koin.core.component.KoinComponent
@@ -15,6 +16,7 @@ interface DogBreedsRepositoryInterface {
     fun fetchAllBreedsAsFlow(): Flow<List<DogBreed>>
     suspend fun fetchBreedByIdAsFlow(id: Long): Flow<DogBreed?>
     suspend fun fetchRandomBreed(): DogBreed
+    suspend fun searchDogBreed(query: String): Flow<List<DogBreed>>
     suspend fun dumpBreedsDatabaseInitialData()
 }
 
@@ -23,7 +25,7 @@ class DogBreedsRepository : KoinComponent, DogBreedsRepositoryInterface {
     @NativeCoroutineScope
     private val coroutineScope: CoroutineScope = MainScope()
     private val topDawgDatabase: TopDawgDatabaseWrapper by inject()
-    private val breedsQueries = topDawgDatabase.instance?.breedsQueries
+    private val breedsQueries = topDawgDatabase.instance?.dogbreedsQueries
 
     val logger = Logger.withTag("BreedsRepository")
 
@@ -35,31 +37,26 @@ class DogBreedsRepository : KoinComponent, DogBreedsRepositoryInterface {
 
     override fun fetchAllBreedsAsFlow(): Flow<List<DogBreed>> =
         breedsQueries?.selectAll(
-            mapper = { id, bredFor, breedGroup, height, weight, imageUrl, lifeSpan,
-                       name, origin, temperament, searchString ->
-                logger.i { "Breed[$id]: $name" }
-                DogBreed(
-                    id = id,
-                    bredFor = bredFor,
-                    breedGroup = breedGroup ?: "",
-                    height = height ?: "",
-                    weight = weight ?: "",
-                    imageUrl = imageUrl ?: "",
-                    lifeSpan = lifeSpan ?: "",
-                    name = name,
-                    origin = origin ?: "",
-                    temperament = temperament ?: "",
-                    searchString = searchString ?: ""
-                )
-            })?.asFlow()?.mapToList() ?: flowOf(emptyList())
+            mapper = dogBreedEntityMapper
+        )?.asFlow()?.mapToList() ?: flowOf(emptyList())
 
-    override suspend fun fetchBreedByIdAsFlow(id: Long): Flow<DogBreed?> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun fetchBreedByIdAsFlow(id: Long): Flow<DogBreed?> =
+        breedsQueries?.fetchById(id=id)?.asFlow()
+            ?.mapToOne()
+            ?.map { breed ->
+                breed.toDogBreed()
+            } ?: flowOf(null)
+//            .asFlow()?.map { it. }
 
     override suspend fun fetchRandomBreed(): DogBreed {
         TODO("Not yet implemented")
     }
+
+    override suspend fun searchDogBreed(query: String): Flow<List<DogBreed>> =
+        breedsQueries?.search(
+            query = "% $query %",
+            mapper = dogBreedEntityMapper
+        )?.asFlow()?.mapToList() ?: flowOf(emptyList())
 
     override suspend fun dumpBreedsDatabaseInitialData() {
         TODO("Not yet implemented")

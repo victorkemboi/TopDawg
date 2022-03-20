@@ -14,5 +14,4 @@ data class DogBreed(
     val name: String,
     val origin: String,
     val temperament: String,
-    val searchString: String = "$breedGroup $name $origin",
 )

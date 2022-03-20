@@ -1,4 +1,4 @@
-CREATE TABLE Breeds(
+CREATE TABLE DogBreeds(
 id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 bredFor TEXT NOT NULL,
 breedGroup TEXT,
@@ -13,13 +13,16 @@ searchString TEXT
 );
 
 insertItem:
-INSERT OR REPLACE INTO Breeds VALUES(?,?,?,?,?,?,?,?,?,?,?);
+INSERT OR REPLACE INTO DogBreeds VALUES(?,?,?,?,?,?,?,?,?,?,?);
 
 selectAll:
-SELECT * FROM Breeds;
+SELECT * FROM DogBreeds ;
 
 search:
-SELECT * FROM Breeds WHERE searchString LIKE (:query);
+SELECT * FROM DogBreeds  WHERE searchString LIKE (:query);
+
+fetchById:
+SELECT * FROM DogBreeds WHERE id=:id;
 
 deleteAll:
-DELETE FROM Breeds;
+DELETE FROM DogBreeds;
