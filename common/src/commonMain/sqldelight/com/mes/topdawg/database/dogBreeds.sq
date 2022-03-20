@@ -26,3 +26,12 @@ SELECT * FROM DogBreeds WHERE id=:id;
 
 deleteAll:
 DELETE FROM DogBreeds;
+
+countAll:
+SELECT COUNT(*) FROM DogBreeds;
+
+count:
+SELECT COUNT(*) FROM DogBreeds  WHERE searchString LIKE (:query);
+
+deleteDogBreeds:
+DROP TABLE IF EXISTS DogBreeds;

@@ -6,7 +6,7 @@ import com.mes.topdawg.database.DogBreeds
 val dogBreedEntityMapper: (
     Long, String, String?, String?, String?, String?, String?, String, String?, String?, String?
 ) -> DogBreed = { id, bredFor, breedGroup, height, weight, imageUrl, lifeSpan,
-                  name, origin, temperament, searchString ->
+                  name, origin, temperament, _ ->
 
     DogBreed(
         id = id,
