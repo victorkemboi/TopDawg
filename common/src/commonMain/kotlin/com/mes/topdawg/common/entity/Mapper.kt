@@ -1,6 +1,6 @@
-package com.mes.topdawg.common.repository
+package com.mes.topdawg.common.entity
 
-import com.mes.topdawg.common.entity.DogBreed
+import com.mes.topdawg.common.entity.local.DogBreed
 import com.mes.topdawg.database.DogBreeds
 
 val dogBreedEntityMapper: (

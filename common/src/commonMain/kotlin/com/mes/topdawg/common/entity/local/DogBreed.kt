@@ -1,4 +1,4 @@
-package com.mes.topdawg.common.entity
+package com.mes.topdawg.common.entity.local
 
 import kotlinx.serialization.Serializable
 
@@ -15,3 +15,6 @@ data class DogBreed(
     val origin: String,
     val temperament: String,
 )
+
+@Serializable
+data class DogBreeds(val result: List<DogBreed>)

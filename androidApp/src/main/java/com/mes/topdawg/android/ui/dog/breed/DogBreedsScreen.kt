@@ -3,7 +3,7 @@ package com.mes.topdawg.android.ui.dog.breed
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import com.mes.topdawg.android.ui.home.HomeScreenViewModel
-import com.mes.topdawg.common.entity.DogBreed
+import com.mes.topdawg.common.entity.local.DogBreed
 import org.koin.androidx.compose.getViewModel
 
 const val DogBreedsTag = "DogBreeds"
