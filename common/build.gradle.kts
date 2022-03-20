@@ -1,16 +1,58 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+import com.mes.topdawg.DependenciesPlugin.Deps
+import com.mes.topdawg.DependenciesPlugin.Versions
+
+
 plugins {
     kotlin("multiplatform")
-    kotlin("native.cocoapods")
+    id("kotlinx-serialization")
     id("com.android.library")
+    id("org.jetbrains.kotlin.native.cocoapods")
+    id("com.squareup.sqldelight")
+    id("com.rickclephas.kmp.nativecoroutines")
+    id("com.chromaticnoise.multiplatform-swiftpackage") version "2.0.3"
+    id("com.mes.topdawg.dependencies")
 }
 
+// CocoaPods requires the podspec to have a version.
 version = "1.0"
 
+android {
+    compileSdk = Versions.androidCompileSdk
+    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    defaultConfig {
+        minSdk = Versions.androidMinSdk
+        targetSdk = Versions.androidTargetSdk
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+}
+
 kotlin {
+    val iosTarget: (String, org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget.() -> Unit) -> org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget =
+        when {
+            System.getenv("SDK_NAME")?.startsWith("iphoneos") == true -> ::iosArm64
+            System.getenv("NATIVE_ARCH")
+                ?.startsWith("arm") == true -> ::iosSimulatorArm64 // available to KT 1.5.30
+            else -> ::iosX64
+        }
+    iosTarget("iOS") {}
+
+    val sdkName: String? = System.getenv("SDK_NAME")
+    val isWatchOSDevice = sdkName.orEmpty().startsWith("watchos")
+    if (isWatchOSDevice) {
+        watchosArm64("watch")
+    } else {
+        watchosX64("watch")
+    }
+
+    macosX64("macOS")
     android()
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
+    jvm()
 
     cocoapods {
         summary = "Some description for the Shared Module"
@@ -21,42 +63,103 @@ kotlin {
             baseName = "common"
         }
     }
-    
+
+    js(IR) {
+        useCommonJs()
+        browser()
+    }
+
     sourceSets {
-        val commonMain by getting
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test"))
+        sourceSets["commonMain"].dependencies {
+
+            with(Deps.Ktor) {
+                implementation(clientCore)
+                implementation(clientJson)
+                implementation(clientLogging)
+                implementation(contentNegotiation)
+                implementation(json)
+            }
+
+            with(Deps.Kotlinx) {
+                implementation(coroutinesCore)
+                implementation(serializationCore)
+            }
+
+            with(Deps.SqlDelight) {
+                implementation(runtime)
+                implementation(coroutineExtensions)
+            }
+
+            with(Deps.Koin) {
+                api(core)
+                api(test)
+            }
+
+            with(Deps.Log) {
+                api(kermit)
             }
         }
-        val androidMain by getting
-        val androidTest by getting
-        val iosX64Main by getting
-        val iosArm64Main by getting
-        val iosSimulatorArm64Main by getting
-        val iosMain by creating {
-            dependsOn(commonMain)
-            iosX64Main.dependsOn(this)
-            iosArm64Main.dependsOn(this)
-            iosSimulatorArm64Main.dependsOn(this)
+        sourceSets["commonTest"].dependencies {
+            implementation(Deps.Koin.test)
+            implementation(Deps.Kotlinx.coroutinesTest)
+            implementation(kotlin("test-common"))
+            implementation(kotlin("test-annotations-common"))
         }
-        val iosX64Test by getting
-        val iosArm64Test by getting
-        val iosSimulatorArm64Test by getting
-        val iosTest by creating {
-            dependsOn(commonTest)
-            iosX64Test.dependsOn(this)
-            iosArm64Test.dependsOn(this)
-            iosSimulatorArm64Test.dependsOn(this)
+
+        sourceSets["androidMain"].dependencies {
+            implementation(Deps.Ktor.clientAndroid)
+            implementation(Deps.SqlDelight.androidDriver)
         }
+        sourceSets["androidTest"].dependencies {
+            implementation(Deps.Test.junit)
+        }
+
+        sourceSets["jvmMain"].dependencies {
+            implementation(Deps.Ktor.clientJava)
+            implementation(Deps.SqlDelight.sqliteDriver)
+            implementation(Deps.Log.slf4j)
+        }
+
+        sourceSets["iOSMain"].dependencies {
+            implementation(Deps.Ktor.clientIos)
+            implementation(Deps.SqlDelight.nativeDriver)
+        }
+        sourceSets["iOSTest"].dependencies {
+        }
+
+//        sourceSets["watchMain"].dependencies {
+//            implementation(Deps.Ktor.clientIos)
+//            implementation(Deps.SqlDelight.nativeDriver)
+//        }
+
+//        sourceSets["macOSMain"].dependencies {
+//            implementation(Deps.Ktor.clientIos)
+//            implementation(Deps.SqlDelight.nativeDriverMacos)
+//        }
+//
+//        sourceSets["jsMain"].dependencies {
+//            implementation(Deps.Ktor.clientJs)
+//        }
     }
 }
 
-android {
-    compileSdk = 32
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    defaultConfig {
-        minSdk = 21
-        targetSdk = 32
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+sqldelight {
+    database("TopDawgDatabase") {
+        packageName = "com.mes.topdawg.topdawg.db"
+        sourceFolders = listOf("sqldelight")
+    }
+}
+
+multiplatformSwiftPackage {
+    packageName("TopDawg")
+    swiftToolsVersion("5.3")
+    targetPlatforms {
+        iOS { v("13") }
     }
 }

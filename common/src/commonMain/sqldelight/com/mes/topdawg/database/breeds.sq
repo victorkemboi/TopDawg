@@ -1,0 +1,25 @@
+CREATE TABLE Breeds(
+id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+bredFor TEXT NOT NULL,
+breedGroup TEXT,
+height TEXT,
+weight TEXT,
+imageUrl TEXT,
+lifeSpan TEXT,
+name TEXT NOT NULL,
+origin TEXT,
+temperament TEXT,
+searchString TEXT
+);
+
+insertItem:
+INSERT OR REPLACE INTO Breeds VALUES(?,?,?,?,?,?,?,?,?,?,?);
+
+selectAll:
+SELECT * FROM Breeds;
+
+search:
+SELECT * FROM Breeds WHERE searchString LIKE (:query);
+
+deleteAll:
+DELETE FROM Breeds;

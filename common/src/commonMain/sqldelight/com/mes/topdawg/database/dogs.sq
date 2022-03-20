@@ -1,0 +1,16 @@
+CREATE TABLE Dog(
+id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+name TEXT NOT NULL,
+profileImageUrl TEXT,
+bio TEXT,
+breed INTEGER
+);
+
+insertItem:
+INSERT OR REPLACE INTO Dog VALUES(?,?,?,?,?);
+
+selectAll:
+SELECT * FROM Dog;
+
+deleteAll:
+DELETE FROM Dog;
