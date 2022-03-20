@@ -3,7 +3,7 @@ package com.mes.topdawg.common.entity
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Breed(
+data class DogBreed(
     val id: Long,
     val bredFor: String,
     val breedGroup: String,

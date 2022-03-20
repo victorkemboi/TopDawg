@@ -29,7 +29,7 @@ fun commonModule(enableNetworkLogs: Boolean) = module {
 
     single { CoroutineScope(Dispatchers.Default + SupervisorJob() ) }
 
-    single<BreedRepositoryInterface> { BreedRepository() }
+    single<DogBreedsRepositoryInterface> { DogBreedsRepository() }
 
 }
 
