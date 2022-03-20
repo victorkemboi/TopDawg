@@ -1,7 +1,7 @@
 package com.mes.topdawg.common.entity
 
 import com.mes.topdawg.common.entity.local.DogBreed
-import com.mes.topdawg.database.DogBreeds
+import com.mes.topdawg.database.DogBreedsEntity
 
 val dogBreedEntityMapper: (
     Long, String, String?, String?, String?, String?, String?, String, String?, String?, String?
@@ -22,7 +22,7 @@ val dogBreedEntityMapper: (
     )
 }
 
-fun DogBreeds.toDogBreed() =
+fun DogBreedsEntity.toDogBreed() =
     DogBreed(
         id = this.id,
         bredFor = this.bredFor,

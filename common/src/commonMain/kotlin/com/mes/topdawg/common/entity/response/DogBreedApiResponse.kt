@@ -9,17 +9,18 @@ data class DogBreedApiResponses(
 
 @Serializable
 data class DogBreedApiResponse(
-    val bredFor: String,
-    val breedGroup: String,
     val height: HeightResponse,
     val id: Long,
     val image: ImageResponse,
-    val lifeSpan: String,
+    val life_span: String,
     val name: String,
-    val origin: String,
-    val referenceImageId: String,
-    val temperament: String,
-    val weight: WeightResponse
+    val reference_image_id: String,
+    val temperament: String? = null,
+    val weight: WeightResponse,
+    val bred_for: String? = null,
+    val origin: String? = null,
+    val breed_group: String? = null,
+    val country_code: String? = null,
 )
 
 @Serializable

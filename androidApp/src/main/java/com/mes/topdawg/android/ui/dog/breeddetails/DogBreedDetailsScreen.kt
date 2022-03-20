@@ -1,3 +1,8 @@
 package com.mes.topdawg.android.ui.dog.breeddetails
 
-DogBreedDetailsScreen
+import androidx.compose.runtime.Composable
+
+@Composable
+fun DogBreedDetailsScreen() {
+
+}
