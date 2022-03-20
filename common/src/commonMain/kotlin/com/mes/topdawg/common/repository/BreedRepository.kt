@@ -31,14 +31,11 @@ class BreedRepository : KoinComponent, BreedRepositoryInterface {
         }
     }
 
-    companion object {
-        private const val POLL_INTERVAL = 10000L
-    }
-
     override fun fetchAllBreedsAsFlow(): Flow<List<Breed>> =
         breedsQueries?.selectAll(
             mapper = { id, bredFor, breedGroup, height, weight, imageUrl, lifeSpan,
                        name, origin, temperament, searchString ->
+                logger.i { "Breed[$id]: $name" }
                 Breed(
                     id = id,
                     bredFor = bredFor,
