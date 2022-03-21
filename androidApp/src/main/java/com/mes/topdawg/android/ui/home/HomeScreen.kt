@@ -50,7 +50,9 @@ fun HomeScreen(
                         color = orange200
                     )
                 },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 0.dp),
                 backgroundColor = Color.Black
             )
         }
@@ -58,7 +60,6 @@ fun HomeScreen(
         Column(
             modifier = Modifier
                 .testTag(HomeTag)
-                .padding(paddingValues = paddingValues)
         ) {
             randomDogBreedState.value?.let {
                 RandomDogBreedView(
@@ -67,7 +68,7 @@ fun HomeScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight()
-                        .padding(16.dp)
+                        .padding(bottom = 8.dp)
                 )
             }
         }
@@ -85,8 +86,8 @@ fun RandomDogBreedView(
 
     Column(
         modifier = modifier
-            .clip(RoundedCornerShape(12.dp))
-            .background(color = contentColor, shape = RoundedCornerShape(12.dp))
+//            .clip(RoundedCornerShape(12.dp))
+            .background(color = contentColor)
             .fillMaxWidth()
             .wrapContentHeight()
             .clickable(onClick = { onSelected(dogBreed) }),
@@ -112,7 +113,7 @@ fun RandomDogBreedView(
                 .fillMaxWidth()
                 .wrapContentHeight()
                 .background(contentColor)
-                .padding(bottom = 16.dp, start = 16.dp, end = 16.dp)
+                .padding(bottom = 8.dp, start = 16.dp, end = 16.dp)
         ) {
             Text(text = dogBreed.name, style = TextStyle(fontSize = 20.sp))
             Text(
