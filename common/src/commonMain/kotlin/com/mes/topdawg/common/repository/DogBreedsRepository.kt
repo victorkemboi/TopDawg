@@ -24,7 +24,7 @@ interface DogBreedsRepositoryInterface {
     fun fetchAllBreedsAsFlow(): Flow<List<DogBreed>>
     suspend fun fetchBreedByIdAsFlow(id: Long): Flow<DogBreed?>
     suspend fun fetchRandomBreed(): DogBreed?
-    suspend fun searchDogBreed(query: String): Flow<List<DogBreed>>
+    fun searchDogBreed(query: String): Flow<List<DogBreed>>
     suspend fun dumpDogBreedsDatabaseInitialData()
     suspend fun dumpDogBreedsToDatabase()
 }
@@ -64,10 +64,14 @@ class DogBreedsRepository : KoinComponent, DogBreedsRepositoryInterface {
     }
 
 
-    override suspend fun searchDogBreed(query: String): Flow<List<DogBreed>> =
-        dogBreedsQueries?.search(
-            query = "% $query %", mapper = dogBreedEntityMapper
-        )?.asFlow()?.mapToList() ?: flowOf(emptyList())
+    override fun searchDogBreed(query: String): Flow<List<DogBreed>> =
+        if (query.isEmpty()) {
+            fetchAllBreedsAsFlow()
+        } else {
+            dogBreedsQueries?.search(
+                query = "% $query %", mapper = dogBreedEntityMapper
+            )?.asFlow()?.mapToList() ?: flowOf(emptyList())
+        }
 
     override suspend fun dumpDogBreedsDatabaseInitialData() {
         dogBreedsQueries?.deleteAll()

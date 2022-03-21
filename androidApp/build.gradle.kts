@@ -54,6 +54,7 @@ dependencies {
         implementation(navigation)
         implementation(coilCompose)
         implementation(accompanistNavigationAnimation)
+        implementation(accompanistFlowLayout)
         implementation(uiTooling)
     }
 

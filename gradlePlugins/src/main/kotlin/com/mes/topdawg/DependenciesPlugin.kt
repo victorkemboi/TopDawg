@@ -129,6 +129,9 @@ class DependenciesPlugin : Plugin<Project> {
             const val coilCompose = "io.coil-kt:coil-compose:1.3.1"
             const val accompanistNavigationAnimation =
                 "com.google.accompanist:accompanist-navigation-animation:${Versions.accompanist}"
+
+            const val accompanistFlowLayout =
+                "com.google.accompanist:accompanist-flowlayout:${Versions.accompanist}"
         }
 
         object Koin {
