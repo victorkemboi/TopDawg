@@ -1,5 +1,4 @@
 import com.mes.topdawg.DependenciesPlugin.Deps
-import com.mes.topdawg.DependenciesPlugin.Versions
 
 plugins {
     id("com.android.application")
@@ -39,6 +38,7 @@ dependencies {
         implementation(lifecycleRuntimeKtx)
         implementation(lifecycleViewmodelKtx)
         implementation(activityCompose)
+        implementation(constraintLayout)
     }
 
     with(Deps.Glance) {

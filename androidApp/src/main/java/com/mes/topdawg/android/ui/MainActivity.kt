@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -33,7 +34,10 @@ fun greet(): String {
     return Greeting().greeting()
 }
 
+@ExperimentalComposeUiApi
+@ExperimentalAnimationApi
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -68,8 +72,9 @@ val bottomNavigationItems = listOf(
     )
 )
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
+@ExperimentalComposeUiApi
+@ExperimentalAnimationApi
 fun MainLayout() {
     val navController = rememberAnimatedNavController()
 
@@ -92,9 +97,11 @@ fun MainLayout() {
                             },
                             selected = currentRoute == bottomNavigationitem.route,
                             onClick = {
-                                navController.navigate(bottomNavigationitem.route) {
-                                    popUpTo(navController.graph.id)
-                                    launchSingleTop = true
+                                if (currentRoute != bottomNavigationitem.route) {
+                                    navController.navigate(bottomNavigationitem.route) {
+                                        popUpTo(navController.graph.id)
+                                        launchSingleTop = true
+                                    }
                                 }
                             },
                             selectedContentColor = orange200,

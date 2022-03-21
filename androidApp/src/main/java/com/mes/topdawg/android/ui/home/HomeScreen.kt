@@ -1,27 +1,36 @@
 package com.mes.topdawg.android.ui.home
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.collectAsState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import co.touchlab.kermit.Logger
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
@@ -36,6 +45,7 @@ const val HomeTag = "Home"
 
 @Composable
 @ExperimentalCoilApi
+@ExperimentalComposeUiApi
 fun HomeScreen(
     paddingValues: PaddingValues = PaddingValues(),
     dogBreedSelected: (dogBreed: DogBreed) -> Unit,
@@ -44,7 +54,7 @@ fun HomeScreen(
     val logger = Logger.withTag("HomeScreen")
     val randomDogBreedState = homeScreenViewModel.randomDogBreed.collectAsState()
 
-    LaunchedEffect(key1 = homeScreenViewModel) {
+    LaunchedEffect(key1 = Unit) {
         homeScreenViewModel.fetchRandomDogBreed()
     }
 
@@ -66,25 +76,54 @@ fun HomeScreen(
             )
         }
     ) {
-        Column(
-            modifier = Modifier
-                .testTag(HomeTag)
-        ) {
-            logger.i { "Breed is: ${randomDogBreedState.value}" }
-            if (randomDogBreedState.value != null) {
-                RandomDogBreedView(
-                    dogBreed = randomDogBreedState.value!!,
-                    onSelected = dogBreedSelected,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .padding(bottom = 8.dp)
-                )
-            } else {
-                SideEffect {
-                    homeScreenViewModel.fetchRandomDogBreed()
+        ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+            val (randomDogBreed, searchView) = createRefs()
+            Column(
+                modifier = Modifier
+                    .testTag(HomeTag)
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .constrainAs(randomDogBreed) {
+                        top.linkTo(parent.top)
+                        
+                    }
+            ) {
+                val breed = randomDogBreedState.value
+                if (breed != null) {
+                    logger.i { "The breed state is not empty: $breed" }
+                    RandomDogBreedView(
+                        dogBreed = breed,
+                        onSelected = dogBreedSelected,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentHeight()
+                            .padding(bottom = 8.dp)
+                    )
+                } else {
+                    logger.i { "The breed state is empty." }
+                    SideEffect {
+                        homeScreenViewModel.fetchRandomDogBreed()
+                    }
                 }
             }
+
+            SearchView(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .padding(top = 16.dp, bottom = paddingValues.calculateBottomPadding())
+                    .constrainAs(searchView) {
+                        bottom.linkTo(parent.bottom)
+                    },
+                searchText = homeScreenViewModel.searchQueryState.value,
+                onSearchTextChanged = {
+                    homeScreenViewModel.searchQueryState.value = it
+                },
+                onClearClick = {
+                    homeScreenViewModel.searchQueryState.value = ""
+                },
+            )
+
         }
     }
 }
@@ -100,7 +139,6 @@ fun RandomDogBreedView(
 
     Column(
         modifier = modifier
-//            .clip(RoundedCornerShape(12.dp))
             .background(color = contentColor)
             .fillMaxWidth()
             .wrapContentHeight()
@@ -140,6 +178,75 @@ fun RandomDogBreedView(
             )
         }
     }
+}
+
+@ExperimentalComposeUiApi
+@Composable
+fun SearchView(
+    modifier: Modifier = Modifier,
+    searchText: String = "",
+    placeholderText: String = "Search...",
+    onSearchTextChanged: (String) -> Unit = {},
+    onClearClick: () -> Unit = {},
+) {
+
+    var showClearButton by remember { mutableStateOf(false) }
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
+
+//    LaunchedEffect(Unit) {
+//        focusRequester.requestFocus()
+//    }
+
+    OutlinedTextField(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 2.dp)
+            .onFocusChanged { focusState ->
+                showClearButton = (focusState.isFocused)
+            }
+            .focusRequester(focusRequester),
+        value = searchText,
+        onValueChange = onSearchTextChanged,
+        placeholder = {
+            Text(text = placeholderText)
+        },
+        colors = TextFieldDefaults.textFieldColors(
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            backgroundColor = Color.Transparent,
+            cursorColor = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
+        ),
+        trailingIcon = {
+            AnimatedVisibility(
+                visible = showClearButton,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                IconButton(onClick = {
+                    if (searchText.isEmpty()) {
+                        focusManager.clearFocus()
+                    } else {
+                        onClearClick()
+                    }
+                }) {
+                    Icon(
+                        imageVector = Icons.Filled.Close,
+                        contentDescription = "Close icon"
+                    )
+                }
+
+            }
+        },
+        maxLines = 1,
+        singleLine = true,
+        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+        keyboardActions = KeyboardActions(onDone = {
+            keyboardController?.hide()
+        }),
+    )
+
 }
 
 @ExperimentalCoilApi

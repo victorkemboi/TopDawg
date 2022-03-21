@@ -41,6 +41,7 @@ class DependenciesPlugin : Plugin<Project> {
 
         const val material = "1.4.0"
         const val activityCompose = "1.5.0-alpha03"
+        const val constraintLayout = "1.0.0-beta02"
         const val lifecycleKtx = "2.4.0-rc01"
         const val lifecycleRuntimeKtx = lifecycleKtx
         const val lifecycleViewmodelKtx = lifecycleKtx
@@ -90,6 +91,9 @@ class DependenciesPlugin : Plugin<Project> {
                 "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycleViewmodelKtx}"
             const val activityCompose =
                 "androidx.activity:activity-compose:${Versions.activityCompose}"
+
+            const val constraintLayout =
+                "androidx.constraintlayout:constraintlayout-compose:${Versions.constraintLayout}"
         }
 
         object Test {
