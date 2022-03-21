@@ -12,14 +12,10 @@ class HomeScreenViewModel(
     private val breedsRepository: DogBreedsRepositoryInterface
 ) : ViewModel() {
 
-    init {
-        fetchRandomDogBreed()
-    }
-
     private val randomDogBreedMutableStateFlow: MutableStateFlow<DogBreed?> = MutableStateFlow(null)
     val randomDogBreed = randomDogBreedMutableStateFlow.asStateFlow()
 
-    private fun fetchRandomDogBreed() = viewModelScope.launch(Dispatchers.IO) {
+    fun fetchRandomDogBreed() = viewModelScope.launch(Dispatchers.IO) {
         randomDogBreedMutableStateFlow.value = breedsRepository.fetchRandomBreed()
     }
 }

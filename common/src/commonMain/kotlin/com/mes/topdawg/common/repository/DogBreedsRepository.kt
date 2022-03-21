@@ -37,7 +37,7 @@ class DogBreedsRepository : KoinComponent, DogBreedsRepositoryInterface {
     private val topDawgDatabase: TopDawgDatabaseWrapper by inject()
     private val dogBreedsQueries = topDawgDatabase.instance?.dogBreedsQueries
 
-    val logger = Logger.withTag("BreedsRepository")
+    private val logger = Logger.withTag("BreedsRepository")
 
     init {
         coroutineScope.launch {

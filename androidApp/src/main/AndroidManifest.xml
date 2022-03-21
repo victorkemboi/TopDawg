@@ -7,6 +7,7 @@
     <application
         android:name=".TopDawgApplication"
         android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/appName"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">

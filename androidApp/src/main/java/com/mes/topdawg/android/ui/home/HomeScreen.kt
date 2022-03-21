@@ -9,6 +9,8 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +22,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import co.touchlab.kermit.Logger
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.mes.topdawg.android.ui.theme.darkenColor
@@ -30,6 +33,7 @@ import org.koin.androidx.compose.getViewModel
 
 const val HomeTag = "Home"
 
+
 @Composable
 @ExperimentalCoilApi
 fun HomeScreen(
@@ -37,7 +41,12 @@ fun HomeScreen(
     dogBreedSelected: (dogBreed: DogBreed) -> Unit,
     homeScreenViewModel: HomeScreenViewModel = getViewModel()
 ) {
+    val logger = Logger.withTag("HomeScreen")
     val randomDogBreedState = homeScreenViewModel.randomDogBreed.collectAsState()
+
+    LaunchedEffect(key1 = homeScreenViewModel) {
+        homeScreenViewModel.fetchRandomDogBreed()
+    }
 
     Scaffold(
         topBar = {
@@ -61,15 +70,20 @@ fun HomeScreen(
             modifier = Modifier
                 .testTag(HomeTag)
         ) {
-            randomDogBreedState.value?.let {
+            logger.i { "Breed is: ${randomDogBreedState.value}" }
+            if (randomDogBreedState.value != null) {
                 RandomDogBreedView(
-                    dogBreed = it,
+                    dogBreed = randomDogBreedState.value!!,
                     onSelected = dogBreedSelected,
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentHeight()
                         .padding(bottom = 8.dp)
                 )
+            } else {
+                SideEffect {
+                    homeScreenViewModel.fetchRandomDogBreed()
+                }
             }
         }
     }
