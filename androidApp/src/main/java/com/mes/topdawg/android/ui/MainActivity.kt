@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.navigation.animation.AnimatedNavHost
@@ -24,6 +25,9 @@ import com.mes.topdawg.android.ui.dog.breed.DogBreedsScreen
 import com.mes.topdawg.android.ui.dog.breeddetails.DogBreedDetailsScreen
 import com.mes.topdawg.android.ui.home.HomeScreen
 import com.mes.topdawg.android.ui.theme.TopDawgTheme
+import com.mes.topdawg.android.ui.theme.maroon700
+import com.mes.topdawg.android.ui.theme.orange200
+import com.mes.topdawg.android.ui.theme.orange500
 
 fun greet(): String {
     return Greeting().greeting()
@@ -72,7 +76,9 @@ fun MainLayout() {
     TopDawgTheme {
         Scaffold(
             bottomBar = {
-                BottomNavigation {
+                BottomNavigation(
+                    backgroundColor = Color.Black
+                ) {
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     val currentRoute = navBackStackEntry?.destination?.route
 
@@ -90,7 +96,9 @@ fun MainLayout() {
                                     popUpTo(navController.graph.id)
                                     launchSingleTop = true
                                 }
-                            }
+                            },
+                            selectedContentColor = orange200,
+                            unselectedContentColor = Color.Gray
                         )
                     }
                 }

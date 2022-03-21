@@ -51,6 +51,7 @@ class DogBreedsRepository : KoinComponent, DogBreedsRepositoryInterface {
 
     override suspend fun fetchBreedByIdAsFlow(id: Long): Flow<DogBreed?> =
         dogBreedsQueries?.fetchById(id = id)?.asFlow()?.mapToOne()?.map { breed ->
+            logger.i { "Breed: $breed" }
             breed.toDogBreed()
         } ?: flowOf(null)
 
@@ -59,9 +60,7 @@ class DogBreedsRepository : KoinComponent, DogBreedsRepositoryInterface {
             (0..(dogBreedsQueries?.countAll()?.asFlow()?.mapToOne()?.first() ?: 0)).random()
         logger.i { "Random id: $randomId" }
         if (randomId < 1) return null
-        return dogBreedsQueries?.fetchById(id = randomId)?.asFlow()?.mapToOne()?.map { breed ->
-            breed.toDogBreed()
-        }?.firstOrNull()
+        return dogBreedsQueries?.fetchById(randomId)?.executeAsOneOrNull()?.toDogBreed()
     }
 
 
@@ -86,7 +85,7 @@ class DogBreedsRepository : KoinComponent, DogBreedsRepositoryInterface {
         val breedsJson = FileResource(Constants.BreedsLocation)
         logger.i { "Breeds read from file." }
         if (breedsJson.json != null) {
-            logger.i { "Breeds from file is not null" }
+            logger.i { "Breeds from file string is not null" }
             val breeds =
                 json.decodeFromString<List<DogBreedApiResponse>>(breedsJson.json.trimIndent())
             breeds.forEach {
