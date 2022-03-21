@@ -11,6 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
@@ -56,6 +57,46 @@ fun HomeScreen(
 @Composable
 fun RandomDogBreedView(dogBreed: DogBreed, onSelected: (dogBreed: DogBreed) -> Unit) {
 
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = { onSelected(dogBreed) })
+            .padding(16.dp),
+    ) {
+
+        if (dogBreed.imageUrl.isNotEmpty()) {
+            Image(
+                painter = rememberImagePainter(dogBreed.imageUrl),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp),
+                contentDescription = dogBreed.name,
+                contentScale = ContentScale.FillWidth
+            )
+        } else {
+            Spacer(modifier = Modifier.size(60.dp))
+        }
+
+        Spacer(modifier = Modifier.size(12.dp))
+
+        Column {
+            Text(text = dogBreed.name, style = TextStyle(fontSize = 20.sp))
+            Text(
+                text = dogBreed.bredFor,
+                style = TextStyle(fontSize = 16.sp)
+            )
+            Text(
+                text = dogBreed.breedGroup,
+                style = TextStyle(color = Color.DarkGray, fontSize = 14.sp)
+            )
+        }
+    }
+}
+
+@ExperimentalCoilApi
+@Composable
+fun DogBreedGroupItemView(dogBreed: DogBreed, onSelected: (dogBreed: DogBreed) -> Unit) {
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -84,4 +125,5 @@ fun RandomDogBreedView(dogBreed: DogBreed, onSelected: (dogBreed: DogBreed) -> U
         }
     }
 }
+
 

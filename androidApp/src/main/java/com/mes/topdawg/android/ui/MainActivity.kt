@@ -1,4 +1,4 @@
-package com.mes.topdawg.android
+package com.mes.topdawg.android.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
