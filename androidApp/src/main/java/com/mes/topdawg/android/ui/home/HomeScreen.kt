@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import co.touchlab.kermit.Logger
 import coil.annotation.ExperimentalCoilApi
+import coil.compose.SubcomposeAsyncImage
 import coil.compose.rememberImagePainter
 import com.mes.topdawg.android.ui.theme.darkenColor
 import com.mes.topdawg.android.ui.theme.getRandomLightColor
@@ -63,40 +64,36 @@ fun HomeScreen(
         homeScreenViewModel.fetchRandomDogBreed()
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "🦴 Top Dawg 🐩",
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center,
-                        color = orange200
-                    )
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 0.dp),
-                backgroundColor = Color.Black
-            )
-        }
-    ) {
+    Scaffold(topBar = {
+        TopAppBar(
+            title = {
+                Text(
+                    text = "🦴 Top Dawg 🐩",
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    color = orange200
+                )
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 0.dp),
+            backgroundColor = Color.Black
+        )
+    }) {
         ConstraintLayout(modifier = Modifier.fillMaxSize()) {
             val (randomDogBreed, searchView) = createRefs()
-            Column(
-                modifier = Modifier
-                    .testTag(HomeTag)
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-                    .constrainAs(randomDogBreed) {
-                        top.linkTo(parent.top)
+            Column(modifier = Modifier
+                .testTag(HomeTag)
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .constrainAs(randomDogBreed) {
+                    top.linkTo(parent.top)
 
-                    }
-            ) {
+                }) {
                 val breed = randomDogBreedState.value
                 if (breed != null) {
                     logger.i { "The breed state is not empty: $breed" }
-                    RandomDogBreedView(
+                    DogBreedHighlight(
                         dogBreed = breed,
                         onSelected = dogBreedSelected,
                         modifier = Modifier
@@ -119,16 +116,13 @@ fun HomeScreen(
                         "Dog breeds: "
                     } else {
                         "Search results: ${searchQueryState.value}"
-                    },
-                    modifier = Modifier.padding(top = 12.dp, bottom = 8.dp, start = 16.dp)
+                    }, modifier = Modifier.padding(top = 12.dp, bottom = 8.dp, start = 16.dp)
                 )
 
                 DogBreedsHorizontalList(
-                    dogBreeds = dogBreedSearchResults,
-                    dogBreedSelected = {
+                    dogBreeds = dogBreedSearchResults, dogBreedSelected = {
                         homeScreenViewModel.setSelectedTopDogBreed(it)
-                    },
-                    modifier = Modifier
+                    }, modifier = Modifier
                 )
             }
 
@@ -168,15 +162,14 @@ fun DogBreedsHorizontalList(
         BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
             // LazyRow to display your items horizontally
             LazyRow(
-                modifier = Modifier.fillMaxWidth(),
-                state = rememberLazyListState()
+                modifier = Modifier.fillMaxWidth(), state = rememberLazyListState()
             ) {
                 itemsIndexed(items = dogBreeds) { index, item ->
-                    RandomDogBreedView(
+                    DogBreedHighlight(
                         dogBreed = item,
                         onSelected = dogBreedSelected,
                         modifier = Modifier
-                            .width(280.dp)
+                            .width(200.dp)
                             .wrapContentHeight()
                             .padding(bottom = 8.dp, end = 32.dp),
                         imageHeight = 100.dp
@@ -194,7 +187,7 @@ fun DogBreedsHorizontalList(
 
 @ExperimentalCoilApi
 @Composable
-fun RandomDogBreedView(
+fun DogBreedHighlight(
     modifier: Modifier = Modifier,
     dogBreed: DogBreed,
     onSelected: (dogBreed: DogBreed) -> Unit,
@@ -202,31 +195,40 @@ fun RandomDogBreedView(
     showBreedDescription: Boolean = false,
     contentColor: Color? = null
 ) {
+    val logger = Logger.withTag("DogBreedHighlight")
     val contentColorState = remember {
         contentColor ?: getRandomLightColor()
     }
 
+    val showImageLoadProgressIndicator = remember {
+        mutableStateOf(false)
+    }
+
     Column(
         modifier = modifier
-            .background(color = contentColorState)
             .clickable(onClick = { onSelected(dogBreed) }),
+        horizontalAlignment = Alignment.Start
     ) {
 
-        if (dogBreed.imageUrl.isNotEmpty()) {
-            Image(
-                painter = rememberImagePainter(dogBreed.imageUrl),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(imageHeight)
-                    .weight(1f, fill = false),
-                contentDescription = dogBreed.name,
-                contentScale = ContentScale.FillWidth
-            )
-        } else {
-            Spacer(modifier = Modifier.size(imageHeight))
-        }
+        Box(modifier = Modifier.height(imageHeight)) {
+            if (dogBreed.imageUrl.isNotEmpty()) {
+                if (showImageLoadProgressIndicator.value) {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                }
 
-        Spacer(modifier = Modifier.size(12.dp))
+                SubcomposeAsyncImage(
+                    model = dogBreed.imageUrl,
+                    loading = {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(25.dp)
+                        )
+                    },
+                    contentDescription = dogBreed.name,
+                    modifier = Modifier,
+                    contentScale = if (showBreedDescription) ContentScale.Fit else ContentScale.FillWidth
+                )
+            }
+        }
 
         Column(
             modifier = Modifier
@@ -235,11 +237,13 @@ fun RandomDogBreedView(
                 .background(contentColorState)
                 .padding(bottom = 8.dp, start = 16.dp, end = 16.dp)
         ) {
-            Text(text = dogBreed.name, style = TextStyle(fontSize = 20.sp))
+            Text(
+                text = dogBreed.name, style = TextStyle(fontSize = 20.sp),
+                modifier = Modifier.padding(top = 12.dp)
+            )
             if (showBreedDescription) {
                 Text(
-                    text = dogBreed.bredFor,
-                    style = TextStyle(fontSize = 16.sp)
+                    text = dogBreed.bredFor, style = TextStyle(fontSize = 16.sp)
                 )
             }
             Text(
@@ -286,9 +290,7 @@ fun SearchView(
         ),
         trailingIcon = {
             AnimatedVisibility(
-                visible = showClearButton,
-                enter = fadeIn(),
-                exit = fadeOut()
+                visible = showClearButton, enter = fadeIn(), exit = fadeOut()
             ) {
                 IconButton(onClick = {
                     if (searchText.isEmpty()) {
@@ -298,8 +300,7 @@ fun SearchView(
                     }
                 }) {
                     Icon(
-                        imageVector = Icons.Filled.Close,
-                        contentDescription = "Close icon"
+                        imageVector = Icons.Filled.Close, contentDescription = "Close icon"
                     )
                 }
 
@@ -323,14 +324,14 @@ fun DogBreedGroupItemView(dogBreed: DogBreed, onSelected: (dogBreed: DogBreed) -
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = { onSelected(dogBreed) })
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .padding(16.dp), verticalAlignment = Alignment.CenterVertically
     ) {
 
         if (dogBreed.imageUrl.isNotEmpty()) {
             Image(
                 painter = rememberImagePainter(dogBreed.imageUrl),
-                modifier = Modifier.size(60.dp), contentDescription = dogBreed.name
+                modifier = Modifier.size(60.dp),
+                contentDescription = dogBreed.name
             )
         } else {
             Spacer(modifier = Modifier.size(60.dp))

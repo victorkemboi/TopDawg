@@ -26,6 +26,7 @@ class DependenciesPlugin : Plugin<Project> {
         const val wearCompose = "1.0.0-alpha16"
         const val navCompose = "2.4.1"
         const val accompanist = "0.24.4-alpha"
+        const val coilCompose = "2.0.0-rc02"
 
         const val composeDesktopWeb = "1.0.1"
 
@@ -126,7 +127,7 @@ class DependenciesPlugin : Plugin<Project> {
             const val wearNavigation =
                 "androidx.wear.compose:compose-navigation:${Versions.wearCompose}"
 
-            const val coilCompose = "io.coil-kt:coil-compose:1.3.1"
+            const val coilCompose = "io.coil-kt:coil-compose:${Versions.coilCompose}"
             const val accompanistNavigationAnimation =
                 "com.google.accompanist:accompanist-navigation-animation:${Versions.accompanist}"
 
