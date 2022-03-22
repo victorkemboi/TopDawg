@@ -198,14 +198,17 @@ fun RandomDogBreedView(
     modifier: Modifier = Modifier,
     dogBreed: DogBreed,
     onSelected: (dogBreed: DogBreed) -> Unit,
-    contentColor: Color = getRandomLightColor(),
     imageHeight: Dp = 200.dp,
-    showBreedDescription: Boolean = false
+    showBreedDescription: Boolean = false,
+    contentColor: Color? = null
 ) {
+    val contentColorState = remember {
+        contentColor ?: getRandomLightColor()
+    }
 
     Column(
         modifier = modifier
-            .background(color = contentColor)
+            .background(color = contentColorState)
             .clickable(onClick = { onSelected(dogBreed) }),
     ) {
 
@@ -229,7 +232,7 @@ fun RandomDogBreedView(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
-                .background(contentColor)
+                .background(contentColorState)
                 .padding(bottom = 8.dp, start = 16.dp, end = 16.dp)
         ) {
             Text(text = dogBreed.name, style = TextStyle(fontSize = 20.sp))
@@ -241,7 +244,7 @@ fun RandomDogBreedView(
             }
             Text(
                 text = dogBreed.breedGroup,
-                style = TextStyle(color = contentColor.darkenColor(), fontSize = 14.sp)
+                style = TextStyle(color = contentColorState.darkenColor(), fontSize = 14.sp)
             )
         }
     }

@@ -69,7 +69,7 @@ class DogBreedsRepository : KoinComponent, DogBreedsRepositoryInterface {
             fetchAllBreedsAsFlow()
         } else {
             dogBreedsQueries?.search(
-                query = "% $query %", mapper = dogBreedEntityMapper
+                query = "%$query%", mapper = dogBreedEntityMapper
             )?.asFlow()?.mapToList() ?: flowOf(emptyList())
         }
 
