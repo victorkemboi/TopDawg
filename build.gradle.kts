@@ -1,5 +1,7 @@
 plugins {
     id("org.jetbrains.kotlinx.kover") version "0.5.0"
+    id("io.gitlab.arturbosch.detekt") version "1.20.0-RC1"
+    id("org.jlleitschuh.gradle.ktlint") version "10.2.1"
 }
 
 buildscript {
@@ -38,6 +40,38 @@ allprojects {
         maven(url = "https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-js-wrappers")
         maven(url = "https://jitpack.io")
         maven(url = "https://maven.pkg.jetbrains.space/public/p/kotlinx-coroutines/maven")
+    }
+}
+
+subprojects {
+    val ktlintVersion = "10.2.1"
+    apply {
+        plugin("io.gitlab.arturbosch.detekt")
+        plugin("org.jlleitschuh.gradle.ktlint")
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    ktlint {
+        debug.set(false)
+        version.set(ktlintVersion)
+        verbose.set(true)
+        android.set(false)
+        outputToConsole.set(true)
+        ignoreFailures.set(false)
+        enableExperimentalRules.set(true)
+        filter {
+            exclude("**/generated/**")
+            include("**/kotlin/**")
+        }
+    }
+
+    detekt {
+//        config = rootProject.files("config/detekt/detekt.yml")
+        toolVersion = "1.20.0-RC1"
+        config = files(file("$project.rootDir/tools/detekt.yml"))
     }
 }
 
