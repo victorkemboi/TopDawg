@@ -46,7 +46,6 @@ import org.koin.androidx.compose.getViewModel
 
 const val HomeTag = "Home"
 
-
 @Composable
 @ExperimentalCoilApi
 @ExperimentalComposeUiApi
@@ -82,14 +81,15 @@ fun HomeScreen(
     }) {
         ConstraintLayout(modifier = Modifier.fillMaxSize()) {
             val (randomDogBreed, searchView) = createRefs()
-            Column(modifier = Modifier
-                .testTag(HomeTag)
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .constrainAs(randomDogBreed) {
-                    top.linkTo(parent.top)
-
-                }) {
+            Column(
+                modifier = Modifier
+                    .testTag(HomeTag)
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .constrainAs(randomDogBreed) {
+                        top.linkTo(parent.top)
+                    }
+            ) {
                 val breed = randomDogBreedState.value
                 if (breed != null) {
                     logger.i { "The breed state is not empty: $breed" }
@@ -116,7 +116,8 @@ fun HomeScreen(
                         "Dog breeds: "
                     } else {
                         "Search results: ${searchQueryState.value}"
-                    }, modifier = Modifier.padding(top = 12.dp, bottom = 8.dp, start = 16.dp)
+                    },
+                    modifier = Modifier.padding(top = 12.dp, bottom = 8.dp, start = 16.dp)
                 )
 
                 DogBreedsHorizontalList(
@@ -144,11 +145,9 @@ fun HomeScreen(
                     homeScreenViewModel.searchDogBreeds("")
                 },
             )
-
         }
     }
 }
-
 
 @ExperimentalCoilApi
 @Composable
@@ -177,13 +176,10 @@ fun DogBreedsHorizontalList(
                 }
             }
         }
-
     } else {
         // show no items
     }
-
 }
-
 
 @ExperimentalCoilApi
 @Composable
@@ -303,7 +299,6 @@ fun SearchView(
                         imageVector = Icons.Filled.Close, contentDescription = "Close icon"
                     )
                 }
-
             }
         },
         maxLines = 1,
@@ -313,7 +308,6 @@ fun SearchView(
             keyboardController?.hide()
         }),
     )
-
 }
 
 @ExperimentalCoilApi
@@ -324,7 +318,8 @@ fun DogBreedGroupItemView(dogBreed: DogBreed, onSelected: (dogBreed: DogBreed) -
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = { onSelected(dogBreed) })
-            .padding(16.dp), verticalAlignment = Alignment.CenterVertically
+            .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
 
         if (dogBreed.imageUrl.isNotEmpty()) {
@@ -348,5 +343,3 @@ fun DogBreedGroupItemView(dogBreed: DogBreed, onSelected: (dogBreed: DogBreed) -
         }
     }
 }
-
-

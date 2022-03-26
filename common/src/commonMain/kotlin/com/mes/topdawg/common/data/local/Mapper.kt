@@ -4,9 +4,19 @@ import com.mes.topdawg.common.data.local.entity.DogBreed
 import com.mes.topdawg.database.DogBreedsEntity
 
 val dogBreedEntityMapper: (
-    Long, String, String?, String?, String?, String?, String?, String, String?, String?, String?
+    Long,
+    String,
+    String?,
+    String?,
+    String?,
+    String?,
+    String?,
+    String,
+    String?,
+    String?,
+    String?
 ) -> DogBreed = { id, bredFor, breedGroup, height, weight, imageUrl, lifeSpan,
-                  name, origin, temperament, _ ->
+    name, origin, temperament, _ ->
     DogBreed(
         id = id,
         bredFor = bredFor,

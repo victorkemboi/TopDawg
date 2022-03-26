@@ -14,5 +14,4 @@ fun DogBreedsScreen(
     breedSelected: (dogBreed: DogBreed) -> Unit,
     homeScreenViewModel: HomeScreenViewModel = getViewModel()
 ) {
-
 }

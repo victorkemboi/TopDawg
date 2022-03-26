@@ -68,7 +68,6 @@ class DogBreedsRepository : KoinComponent, DogBreedsRepositoryInterface {
         return dogBreedsQueries?.fetchById(randomId)?.executeAsOneOrNull()?.toDogBreed()
     }
 
-
     override fun searchDogBreed(query: String): Flow<List<DogBreed>> =
         if (query.isEmpty()) {
             fetchAllBreedsAsFlow()
@@ -114,5 +113,4 @@ class DogBreedsRepository : KoinComponent, DogBreedsRepositoryInterface {
             )
         }
     }
-
 }

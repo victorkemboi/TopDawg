@@ -5,8 +5,7 @@ import com.mes.topdawg.common.data.repository.DogBreedsRepository
 
 class DogBreedDetailsScreenViewModel(
     private val dogBreedsRepository: DogBreedsRepository
-): ViewModel() {
+) : ViewModel() {
 
     val dogBreed = dogBreedsRepository.fetchAllBreedsAsFlow()
-
 }

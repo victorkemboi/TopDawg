@@ -7,7 +7,6 @@ import com.mes.topdawg.common.di.initKoin
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.logger.Level
-import java.io.File
 
 class TopDawgApplication : Application() {
 
@@ -23,5 +22,4 @@ class TopDawgApplication : Application() {
 
         Logger.i { "TopDawg app started." }
     }
-
 }

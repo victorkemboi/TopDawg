@@ -110,7 +110,7 @@ fun MainLayout() {
                     route = Screen.Home.title,
                     exitTransition = {
                         slideOutHorizontally() +
-                                fadeOut(animationSpec = tween(1000))
+                            fadeOut(animationSpec = tween(1000))
                     },
                     popEnterTransition = {
                         slideInHorizontally()
@@ -127,7 +127,7 @@ fun MainLayout() {
                     route = Screen.DogBreeds.title,
                     enterTransition = {
                         slideInHorizontally() +
-                                fadeIn(animationSpec = tween(1000))
+                            fadeIn(animationSpec = tween(1000))
                     },
                     popExitTransition = {
                         slideOutHorizontally()
@@ -144,7 +144,7 @@ fun MainLayout() {
                     route = Screen.DogBreedDetails.title + "/{breedId}",
                     enterTransition = {
                         slideInHorizontally() +
-                                fadeIn(animationSpec = tween(1000))
+                            fadeIn(animationSpec = tween(1000))
                     },
                     popExitTransition = {
                         slideOutHorizontally()

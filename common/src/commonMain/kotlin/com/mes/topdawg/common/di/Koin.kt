@@ -40,11 +40,9 @@ fun commonModule(enableNetworkLogs: Boolean) = module {
     single { CoroutineScope(Dispatchers.Default + SupervisorJob()) }
 
     single<DogBreedsRepositoryInterface> { DogBreedsRepository() }
-
 }
 
 fun createJson() = Json { isLenient = true; ignoreUnknownKeys = true }
-
 
 fun createHttpClient(httpClientEngine: HttpClientEngine, json: Json, enableNetworkLogs: Boolean) =
     HttpClient(httpClientEngine) {

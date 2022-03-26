@@ -5,8 +5,4 @@ import com.mes.topdawg.common.data.repository.DogBreedsRepository
 
 class DogBreedsScreenViewModel(
     private val dogBreedsRepository: DogBreedsRepository
-): ViewModel() {
-
-
-
-}
+) : ViewModel()

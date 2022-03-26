@@ -37,7 +37,6 @@ data class ImageResponse(
     val width: Int
 )
 
-
 @Serializable
 data class WeightResponse(
     val imperial: String,

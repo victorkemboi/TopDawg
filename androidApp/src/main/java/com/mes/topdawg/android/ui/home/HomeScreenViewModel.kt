@@ -37,6 +37,4 @@ class HomeScreenViewModel(
     fun setSelectedTopDogBreed(dogBreed: DogBreed) {
         topDogBreedMutableStateFlow.value = dogBreed
     }
-
-
 }
