@@ -9,11 +9,13 @@ import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
 
+@ExperimentalSerializationApi
 fun initKoin(enableNetworkLogs: Boolean = false, appDeclaration: KoinAppDeclaration = {}) =
     startKoin {
         appDeclaration()
@@ -21,13 +23,15 @@ fun initKoin(enableNetworkLogs: Boolean = false, appDeclaration: KoinAppDeclarat
     }
 
 // called by iOS etc
+@ExperimentalSerializationApi
 fun initKoin() = initKoin(enableNetworkLogs = false) {}
 
+@ExperimentalSerializationApi
 fun commonModule(enableNetworkLogs: Boolean) = module {
     single { createJson() }
     single { createHttpClient(get(), get(), enableNetworkLogs = enableNetworkLogs) }
 
-    single { CoroutineScope(Dispatchers.Default + SupervisorJob() ) }
+    single { CoroutineScope(Dispatchers.Default + SupervisorJob()) }
 
     single<DogBreedsRepositoryInterface> { DogBreedsRepository() }
 
@@ -36,14 +40,15 @@ fun commonModule(enableNetworkLogs: Boolean) = module {
 fun createJson() = Json { isLenient = true; ignoreUnknownKeys = true }
 
 
-fun createHttpClient(httpClientEngine: HttpClientEngine, json: Json, enableNetworkLogs: Boolean) = HttpClient(httpClientEngine) {
-    install(ContentNegotiation) {
-        json(json)
-    }
-    if (enableNetworkLogs) {
-        install(Logging) {
-            logger = Logger.DEFAULT
-            level = LogLevel.INFO
+fun createHttpClient(httpClientEngine: HttpClientEngine, json: Json, enableNetworkLogs: Boolean) =
+    HttpClient(httpClientEngine) {
+        install(ContentNegotiation) {
+            json(json)
+        }
+        if (enableNetworkLogs) {
+            install(Logging) {
+                logger = Logger.DEFAULT
+                level = LogLevel.INFO
+            }
         }
     }
-}

@@ -27,7 +27,6 @@ actual class FileResource actual constructor(location: String) : KoinComponent {
     private val context: Context by inject()
     actual val json: String? =
         context.resources.openRawResource(location.toInt()).bufferedReader().use { it.readText() }
-
 }
 
 actual object Constants {

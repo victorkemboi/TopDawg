@@ -1,6 +1,11 @@
+plugins {
+    id("org.jetbrains.kotlinx.kover") version "0.5.0"
+}
+
 buildscript {
 
     val kotlinVersion = "1.6.10"
+//    val jacocoVersion = "0.8.7"
 
     repositories {
         google()
@@ -14,14 +19,12 @@ buildscript {
         classpath("com.android.tools.build:gradle:7.3.0-alpha07")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
         classpath("org.jetbrains.kotlin:kotlin-serialization:${kotlinVersion}")
-
-//        with(DependenciesPlugin.Deps.Gradle) {
         classpath("com.squareup.sqldelight:gradle-plugin:1.5.3")
 //            classpath(shadow)
         classpath("org.jmailen.gradle:kotlinter-gradle:3.4.5")
         classpath("com.github.ben-manes:gradle-versions-plugin:0.39.0")
         classpath("com.rickclephas.kmp:kmp-nativecoroutines-gradle-plugin:0.11.1-new-mm")
-//        }
+//        classpath("org.jacoco:org.jacoco.core:$jacocoVersion")
     }
 }
 
