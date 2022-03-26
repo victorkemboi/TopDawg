@@ -1,3 +1,4 @@
+@file:JvmName("KoinCommonMain")
 package com.mes.topdawg.common.di
 
 import com.mes.topdawg.common.data.repository.DogBreedsRepository
@@ -16,6 +17,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
+import kotlin.jvm.JvmName
 
 expect fun platformModule(): Module
 
