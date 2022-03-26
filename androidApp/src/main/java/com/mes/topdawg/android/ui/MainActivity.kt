@@ -27,10 +27,6 @@ import com.mes.topdawg.android.ui.home.HomeScreen
 import com.mes.topdawg.android.ui.theme.TopDawgTheme
 import com.mes.topdawg.android.ui.theme.orange200
 
-fun greet(): String {
-    return Greeting().greeting()
-}
-
 @ExperimentalComposeUiApi
 @ExperimentalAnimationApi
 class MainActivity : ComponentActivity() {
