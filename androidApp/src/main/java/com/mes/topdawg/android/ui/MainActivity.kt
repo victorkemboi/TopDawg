@@ -21,14 +21,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.mes.topdawg.Greeting
 import com.mes.topdawg.android.ui.dog.breed.DogBreedsScreen
 import com.mes.topdawg.android.ui.dog.breeddetails.DogBreedDetailsScreen
 import com.mes.topdawg.android.ui.home.HomeScreen
 import com.mes.topdawg.android.ui.theme.TopDawgTheme
-import com.mes.topdawg.android.ui.theme.maroon700
 import com.mes.topdawg.android.ui.theme.orange200
-import com.mes.topdawg.android.ui.theme.orange500
 
 fun greet(): String {
     return Greeting().greeting()

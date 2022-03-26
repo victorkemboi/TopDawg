@@ -14,7 +14,7 @@ class DependenciesPlugin : Plugin<Project> {
         const val androidTargetSdk = androidCompileSdk
 
         const val kotlinCoroutines = "1.6.0"
-        const val koin = "3.1.4"
+        const val koin = "3.2.0-beta-1"
         const val ktor = "2.0.0-beta-1"
         const val kotlinxSerialization = "1.3.2"
         const val kotlinxHtmlJs = "0.7.3"
@@ -58,6 +58,8 @@ class DependenciesPlugin : Plugin<Project> {
         const val kermit = "1.0.0"
 
         const val gradleVersionsPlugin = "0.39.0"
+
+        const val okio = "3.0.0"
     }
 
     object Deps {
@@ -198,6 +200,18 @@ class DependenciesPlugin : Plugin<Project> {
         object Glance {
             const val tiles = "androidx.glance:glance-wear-tiles:1.0.0-alpha02"
             const val appwidget = "androidx.glance:glance-appwidget:1.0.0-alpha02"
+        }
+
+        object Moko {
+            const val resources = "dev.icerock.moko:resources:0.19.0"
+            const val resourcesCompose = "dev.icerock.moko:resources-compose:0.19.0"
+            const val resourcesTest = "dev.icerock.moko:resources-test:0.19.0"
+        }
+
+        object File {
+            const val okio = "com.squareup.okio:okio:${Versions.okio}"
+            const val nodeOkio = "om.squareup.okio:okio-nodefilesystem:${Versions.okio}"
+            const val okioFakeFileSystem = "com.squareup.okio:okio-fakefilesystem:${Versions.okio}"
         }
     }
 }

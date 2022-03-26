@@ -3,8 +3,8 @@ package com.mes.topdawg.android.ui.home
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mes.topdawg.common.entity.local.DogBreed
-import com.mes.topdawg.common.repository.DogBreedsRepositoryInterface
+import com.mes.topdawg.common.data.local.entity.DogBreed
+import com.mes.topdawg.common.data.repository.DogBreedsRepositoryInterface
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 

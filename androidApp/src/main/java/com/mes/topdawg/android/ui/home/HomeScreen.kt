@@ -41,7 +41,7 @@ import coil.compose.rememberImagePainter
 import com.mes.topdawg.android.ui.theme.darkenColor
 import com.mes.topdawg.android.ui.theme.getRandomLightColor
 import com.mes.topdawg.android.ui.theme.orange200
-import com.mes.topdawg.common.entity.local.DogBreed
+import com.mes.topdawg.common.data.local.entity.DogBreed
 import org.koin.androidx.compose.getViewModel
 
 const val HomeTag = "Home"

@@ -1,6 +1,7 @@
 package com.mes.topdawg.common.di
 
-import com.mes.topdawg.common.repository.*
+import com.mes.topdawg.common.data.repository.DogBreedsRepository
+import com.mes.topdawg.common.data.repository.DogBreedsRepositoryInterface
 import io.ktor.client.*
 import io.ktor.client.engine.*
 import io.ktor.client.plugins.*
@@ -12,8 +13,11 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import org.koin.core.context.startKoin
+import org.koin.core.module.Module
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
+
+expect fun platformModule(): Module
 
 @ExperimentalSerializationApi
 fun initKoin(enableNetworkLogs: Boolean = false, appDeclaration: KoinAppDeclaration = {}) =

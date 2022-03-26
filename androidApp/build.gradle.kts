@@ -8,6 +8,7 @@ plugins {
 }
 
 android {
+    namespace = "com.mes.topdawg.android"
     compileSdk = 32
     defaultConfig {
         applicationId = "com.mes.topdawg.android"

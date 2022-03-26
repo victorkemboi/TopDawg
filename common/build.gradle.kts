@@ -20,6 +20,7 @@ version = "1.0"
 
 android {
     compileSdk = Versions.androidCompileSdk
+    namespace = "com.mes.topdawg.android"
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
         minSdk = Versions.androidMinSdk
@@ -42,15 +43,15 @@ kotlin {
         }
     iosTarget("iOS") {}
 
-    val sdkName: String? = System.getenv("SDK_NAME")
-    val isWatchOSDevice = sdkName.orEmpty().startsWith("watchos")
-    if (isWatchOSDevice) {
-        watchosArm64("watch")
-    } else {
-        watchosX64("watch")
-    }
+//    val sdkName: String? = System.getenv("SDK_NAME")
+//    val isWatchOSDevice = sdkName.orEmpty().startsWith("watchos")
+//    if (isWatchOSDevice) {
+//        watchosArm64("watch")
+//    } else {
+//        watchosX64("watch")
+//    }
 
-    macosX64("macOS")
+//    macosX64("macOS")
     android()
     jvm()
 
@@ -64,67 +65,86 @@ kotlin {
         }
     }
 
-    js(IR) {
-        useCommonJs()
-        browser()
-    }
+//    js(IR) {
+//        useCommonJs()
+//        browser()
+//    }
 
     sourceSets {
-        sourceSets["commonMain"].dependencies {
+        val commonMain by getting {
+            dependencies {
 
-            with(Deps.Ktor) {
-                implementation(clientCore)
-                implementation(clientJson)
-                implementation(clientLogging)
-                implementation(contentNegotiation)
-                implementation(json)
+                with(Deps.Ktor) {
+                    implementation(clientCore)
+                    implementation(clientJson)
+                    implementation(clientLogging)
+                    implementation(contentNegotiation)
+                    implementation(json)
+                }
+
+                with(Deps.Kotlinx) {
+                    implementation(coroutinesCore)
+                    implementation(serializationCore)
+                }
+
+                with(Deps.SqlDelight) {
+                    implementation(runtime)
+                    implementation(coroutineExtensions)
+                }
+
+                with(Deps.Koin) {
+                    api(core)
+                    api(test)
+                }
+
+                with(Deps.Log) {
+                    api(kermit)
+                }
+
+                with(Deps.File) {
+                    api(okio)
+                }
             }
+        }
 
-            with(Deps.Kotlinx) {
-                implementation(coroutinesCore)
-                implementation(serializationCore)
-            }
-
-            with(Deps.SqlDelight) {
-                implementation(runtime)
-                implementation(coroutineExtensions)
-            }
-
-            with(Deps.Koin) {
-                api(core)
-                api(test)
-            }
-
-            with(Deps.Log) {
-                api(kermit)
+        val commonTest by getting {
+            dependencies {
+                implementation(Deps.Koin.test)
+                implementation(Deps.Kotlinx.coroutinesTest)
+                implementation(kotlin("test-common"))
+                implementation(kotlin("test-annotations-common"))
+                implementation(Deps.File.okioFakeFileSystem)
             }
         }
-        sourceSets["commonTest"].dependencies {
-            implementation(Deps.Koin.test)
-            implementation(Deps.Kotlinx.coroutinesTest)
-            implementation(kotlin("test-common"))
-            implementation(kotlin("test-annotations-common"))
+        val androidMain by getting {
+            dependencies {
+                implementation(Deps.Ktor.clientAndroid)
+                implementation(Deps.SqlDelight.androidDriver)
+            }
         }
 
-        sourceSets["androidMain"].dependencies {
-            implementation(Deps.Ktor.clientAndroid)
-            implementation(Deps.SqlDelight.androidDriver)
-        }
-        sourceSets["androidTest"].dependencies {
-            implementation(Deps.Test.junit)
+        val androidTest by getting {
+            dependencies {
+                implementation(Deps.Test.junit)
+            }
         }
 
-        sourceSets["jvmMain"].dependencies {
-            implementation(Deps.Ktor.clientJava)
-            implementation(Deps.SqlDelight.sqliteDriver)
-            implementation(Deps.Log.slf4j)
+        val jvmMain by getting {
+            dependencies {
+                implementation(Deps.Ktor.clientJava)
+                implementation(Deps.SqlDelight.sqliteDriver)
+                implementation(Deps.Log.slf4j)
+            }
         }
 
-        sourceSets["iOSMain"].dependencies {
-            implementation(Deps.Ktor.clientIos)
-            implementation(Deps.SqlDelight.nativeDriver)
+        val iOSMain by getting {
+            dependencies {
+                implementation(Deps.Ktor.clientIos)
+                implementation(Deps.SqlDelight.nativeDriver)
+            }
         }
-        sourceSets["iOSTest"].dependencies {
+        val iOSTest by getting {
+            dependencies {}
         }
 
 //        sourceSets["watchMain"].dependencies {
@@ -143,7 +163,7 @@ kotlin {
     }
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+tasks.withType<KotlinCompile> {
     kotlinOptions {
         jvmTarget = "1.8"
     }

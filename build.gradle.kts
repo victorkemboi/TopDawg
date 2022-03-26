@@ -25,6 +25,7 @@ buildscript {
         classpath("com.github.ben-manes:gradle-versions-plugin:0.39.0")
         classpath("com.rickclephas.kmp:kmp-nativecoroutines-gradle-plugin:0.11.1-new-mm")
 //        classpath("org.jacoco:org.jacoco.core:$jacocoVersion")
+        classpath("dev.icerock.moko:resources-generator:0.19.0")
     }
 }
 
