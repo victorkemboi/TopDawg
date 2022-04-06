@@ -1,3 +1,4 @@
+
 pluginManagement {
     repositories {
         google()
@@ -6,8 +7,27 @@ pluginManagement {
     }
 }
 
+dependencyResolutionManagement {
+    repositories {
+        google()
+        gradlePluginPortal()
+        mavenCentral()
+    }
+    versionCatalogs {
+        create("libs") {
+            from(files("deps.versions.toml"))
+        }
+    }
+}
+
 rootProject.name = "TopDawg"
-include(":androidApp")
-include(":common")
+
+include(
+    ":androidApp",
+    ":common"
+)
 
 includeBuild("gradlePlugins")
+
+enableFeaturePreview("VERSION_CATALOGS")
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

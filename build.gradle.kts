@@ -22,7 +22,7 @@ buildscript {
         classpath("org.jetbrains.kotlin:kotlin-serialization:${kotlinVersion}")
         classpath("com.squareup.sqldelight:gradle-plugin:1.5.3")
 //            classpath(shadow)
-        classpath("org.jmailen.gradle:kotlinter-gradle:3.4.5")
+        classpath("org.jmailen.gradle:kotlinter-gradle:3.9.0")
         classpath("com.github.ben-manes:gradle-versions-plugin:0.39.0")
         classpath("com.rickclephas.kmp:kmp-nativecoroutines-gradle-plugin:0.11.1-new-mm")
 //        classpath("org.jacoco:org.jacoco.core:$jacocoVersion")
