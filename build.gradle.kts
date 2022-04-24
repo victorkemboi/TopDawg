@@ -1,7 +1,7 @@
 plugins {
-    id("org.jetbrains.kotlinx.kover") version "0.5.0"
-    id("org.jmailen.kotlinter") version "3.9.0" apply false
-    id("com.github.ben-manes.versions") version "0.42.0"
+    alias(libs.plugins.kover)
+    alias(libs.plugins.gradle.versions)
+    alias(libs.plugins.kotlinter)
 }
 
 buildscript {
