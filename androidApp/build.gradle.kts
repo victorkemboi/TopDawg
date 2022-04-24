@@ -1,10 +1,6 @@
-import com.mes.topdawg.DependenciesPlugin.Deps
-
 plugins {
     id("com.android.application")
     kotlin("android")
-    id("com.github.ben-manes.versions")
-    id("com.mes.topdawg.dependencies")
 }
 
 android {
@@ -31,52 +27,30 @@ android {
 dependencies {
     implementation(project(":common"))
 
-    with(Deps.Android) {
-        implementation(material)
-    }
+    implementation(libs.accompanist.navigation.animation)
 
-    with(Deps.AndroidX) {
-        implementation(lifecycleRuntimeKtx)
-        implementation(lifecycleViewmodelKtx)
-        implementation(activityCompose)
-        implementation(constraintLayout)
-    }
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.constraint.layout.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
 
-    with(Deps.Glance) {
-        implementation(appwidget)
-    }
+    implementation(libs.compose.compiler)
+    implementation(libs.compose.ui)
+    implementation(libs.compose.ui.graphics)
+    androidTestImplementation(libs.compose.ui.test.junit4)
+    debugImplementation(libs.compose.ui.test.manifest)
+    implementation(libs.compose.tooling)
+    implementation(libs.compose.foundation.layout)
+    implementation(libs.compose.material)
+    implementation(libs.compose.navigation)
+    implementation(libs.coil.compose)
 
-    with(Deps.Compose) {
-        implementation(compiler)
-        implementation(ui)
-        implementation(uiGraphics)
-        implementation(foundationLayout)
-        implementation(material)
-        implementation(navigation)
-        implementation(coilCompose)
-        implementation(accompanistNavigationAnimation)
-        implementation(accompanistFlowLayout)
-        implementation(uiTooling)
-    }
+    implementation(libs.koin.android)
+    implementation(libs.koin.android.compose)
+    testImplementation(libs.koin.junit4)
+    testImplementation(libs.koin.junit5)
+    androidTestImplementation(libs.koin.junit4)
+    androidTestImplementation(libs.koin.junit5)
 
-    with(Deps.Koin) {
-        implementation(core)
-        implementation(android)
-        implementation(compose)
-        testImplementation(test)
-        testImplementation(testJUnit4)
-    }
-
-    with(Deps.Test) {
-        testImplementation(junit)
-        androidTestImplementation(androidXTestJUnit)
-        testImplementation(testCore)
-        testImplementation(robolectric)
-        testImplementation(mockito)
-
-        // Compose testing dependencies
-        androidTestImplementation(composeUiTest)
-        androidTestImplementation(composeUiTestJUnit)
-        debugImplementation(composeUiTestManifest)
-    }
+    implementation(libs.material.android)
 }

@@ -1,12 +1,10 @@
 plugins {
-    id("org.jetbrains.kotlinx.kover") version "0.5.0"
-    id("org.jmailen.kotlinter") version "3.9.0" apply false
+    alias(libs.plugins.kover)
+    alias(libs.plugins.gradle.versions)
+    alias(libs.plugins.kotlinter)
 }
 
 buildscript {
-
-    val kotlinVersion = "1.6.10"
-//    val jacocoVersion = "0.8.7"
 
     repositories {
         google()
@@ -16,17 +14,13 @@ buildscript {
     }
 
     dependencies {
-        // keeping this here to allow AS to automatically update
-        classpath("com.android.tools.build:gradle:7.3.0-alpha07")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
-        classpath("org.jetbrains.kotlin:kotlin-serialization:${kotlinVersion}")
-        classpath("com.squareup.sqldelight:gradle-plugin:1.5.3")
-//            classpath(shadow)
-        classpath("org.jmailen.gradle:kotlinter-gradle:3.4.5")
-        classpath("com.github.ben-manes:gradle-versions-plugin:0.39.0")
-        classpath("com.rickclephas.kmp:kmp-nativecoroutines-gradle-plugin:0.11.1-new-mm")
-//        classpath("org.jacoco:org.jacoco.core:$jacocoVersion")
-        classpath("dev.icerock.moko:resources-generator:0.19.0")
+        classpath(libs.gradlePlugin.android.gradle)
+        classpath(libs.gradlePlugin.kotlin)
+        classpath(libs.gradlePlugin.kotlin.serialization)
+        classpath(libs.gradlePlugin.sqldelight)
+        classpath(libs.gradlePlugin.kotlinter)
+        classpath(libs.gradlePlugin.native.coroutines)
+        classpath(libs.gradlePlugin.moko.resource.generator)
     }
 }
 

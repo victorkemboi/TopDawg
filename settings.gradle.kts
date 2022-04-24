@@ -1,3 +1,6 @@
+enableFeaturePreview("VERSION_CATALOGS")
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 pluginManagement {
     repositories {
         google()
@@ -7,7 +10,8 @@ pluginManagement {
 }
 
 rootProject.name = "TopDawg"
-include(":androidApp")
-include(":common")
 
-includeBuild("gradlePlugins")
+include(
+    ":androidApp",
+    ":common"
+)
