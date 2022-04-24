@@ -1,7 +1,7 @@
 [versions]
 android-compile-sdk = "31"
 
-kotlin = "1.6.20"
+kotlin = "1.6.21"
 kotlin-coroutines = "1.6.0"
 koin = "3.2.0-beta-1"
 ktor = "2.0.0-beta-1"
@@ -34,8 +34,10 @@ android-gradle-junit5 = "1.8.2.0"
 
 sql-delight = "1.5.3"
 
+gradlePlugin-android-gradle="7.3.0-alpha09"
 
 [libraries]
+gradlePlugin-android-gradle = { module = "com.android.tools.build:gradle", version.ref = "gradlePlugin-android-gradle" }
 gradlePlugin-kotlinter = { module = "org.jmailen.gradle:kotlinter-gradle", version.ref = "kotlinter" }
 gradlePlugin-sql-delight = { module = "com.squareup.sqldelight:gradle-plugin", version.ref = "sql-delight" }
 gradlePlugin-versions-plugin = { module = "com.github.ben-manes:gradle-versions-plugin", version.ref = "gradle-versions-plugin" }
