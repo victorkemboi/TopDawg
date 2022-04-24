@@ -1,6 +1,7 @@
 plugins {
-    alias(libs.plugins.kover)
+    alias(libs.plugins.detekt)
     alias(libs.plugins.gradle.versions)
+    alias(libs.plugins.kover)
     alias(libs.plugins.kotlinter)
 }
 
@@ -26,6 +27,13 @@ buildscript {
 
 allprojects {
     apply(plugin = "org.jmailen.kotlinter")
+
+    kotlinter {
+        ignoreFailures = false
+        reporters = arrayOf("checkstyle", "plain")
+        experimentalRules = true
+        disabledRules = arrayOf("no-wildcard-imports")
+    }
 
     repositories {
         google()

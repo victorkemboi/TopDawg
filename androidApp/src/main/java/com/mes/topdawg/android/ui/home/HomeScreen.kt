@@ -38,7 +38,6 @@ import co.touchlab.kermit.Logger
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import com.mes.topdawg.android.ui.theme.darkenColor
 import com.mes.topdawg.android.ui.theme.getRandomLightColor
 import com.mes.topdawg.android.ui.theme.orange200
@@ -80,9 +79,11 @@ fun HomeScreen(
             backgroundColor = Color.Black
         )
     }) {
-        ConstraintLayout(modifier = Modifier
-            .padding(it)
-            .fillMaxSize()) {
+        ConstraintLayout(
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize()
+        ) {
             val (randomDogBreed, searchView) = createRefs()
             Column(
                 modifier = Modifier
