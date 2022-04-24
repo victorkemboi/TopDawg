@@ -1,4 +1,4 @@
-package com.mes.topdawg.android.ui.home
+package com.mes.topdawg.android.ui.search
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -38,7 +38,6 @@ import co.touchlab.kermit.Logger
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import com.mes.topdawg.android.ui.theme.darkenColor
 import com.mes.topdawg.android.ui.theme.getRandomLightColor
 import com.mes.topdawg.android.ui.theme.orange200
@@ -50,25 +49,25 @@ const val HomeTag = "Home"
 @Composable
 @ExperimentalCoilApi
 @ExperimentalComposeUiApi
-fun HomeScreen(
+fun SearchScreen(
     paddingValues: PaddingValues = PaddingValues(),
     dogBreedSelected: (dogBreed: DogBreed) -> Unit,
-    homeScreenViewModel: HomeScreenViewModel = getViewModel()
+    searchScreenViewModel: SearchScreenViewModel = getViewModel()
 ) {
     val logger = Logger.withTag("HomeScreen")
-    val randomDogBreedState = homeScreenViewModel.topDogBreed.collectAsState()
-    val dogBreedSearchResultsState = homeScreenViewModel.dogBreedSearchResults.collectAsState()
-    val searchQueryState = homeScreenViewModel.searchQueryState
+    val randomDogBreedState = searchScreenViewModel.topDogBreed.collectAsState()
+    val dogBreedSearchResultsState = searchScreenViewModel.dogBreedSearchResults.collectAsState()
+    val searchQueryState = searchScreenViewModel.searchQueryState
 
     LaunchedEffect(key1 = Unit) {
-        homeScreenViewModel.fetchRandomDogBreed()
+        searchScreenViewModel.fetchRandomDogBreed()
     }
 
     Scaffold(topBar = {
         TopAppBar(
             title = {
                 Text(
-                    text = "🦴 Top Dawg 🐩",
+                    text = "Top Dawg 🐩",
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
                     color = orange200
@@ -125,7 +124,7 @@ fun HomeScreen(
 
                 DogBreedsHorizontalList(
                     dogBreeds = dogBreedSearchResults, dogBreedSelected = {
-                        homeScreenViewModel.setSelectedTopDogBreed(it)
+                        searchScreenViewModel.setSelectedTopDogBreed(it)
                     }, modifier = Modifier
                 )
             }
@@ -141,11 +140,11 @@ fun HomeScreen(
                 searchText = searchQueryState.value,
                 onSearchTextChanged = {
                     searchQueryState.value = it
-                    homeScreenViewModel.searchDogBreeds(it)
+                    searchScreenViewModel.searchDogBreeds(it)
                 },
                 onClearClick = {
                     searchQueryState.value = ""
-                    homeScreenViewModel.searchDogBreeds("")
+                    searchScreenViewModel.searchDogBreeds("")
                 },
             )
         }
