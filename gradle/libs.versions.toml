@@ -69,6 +69,11 @@ koin-junit5 = { module = "io.insert-koin:koin-test-junit5", version.ref = "koin"
 koin-navigation-graph = { module = "io.insert-koin:koin-androidx-navigation", version.ref = "koin" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinx-serialization" }
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-json = { module = "io.ktor:ktor-client-json", version.ref = "ktor" }
+ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+ktor-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-serialization-json = { module = "io.ktor:ktor-client-serialization", version.ref = "ktor" }
 material-android = { module = "com.google.android.material:material", version.ref = "material-android" }
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 okio-fake-file-system = { module = "com.squareup.okio:okio-fakefilesystem", version.ref = "okio" }

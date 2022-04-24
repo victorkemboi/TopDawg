@@ -52,5 +52,11 @@ dependencies {
     androidTestImplementation(libs.koin.junit4)
     androidTestImplementation(libs.koin.junit5)
 
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.json)
+    implementation(libs.ktor.client.logging)
+    implementation(libs.ktor.content.negotiation)
+    implementation(libs.ktor.serialization.json)
+
     implementation(libs.material.android)
 }
