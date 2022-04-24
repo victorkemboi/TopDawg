@@ -3,7 +3,6 @@ package com.mes.topdawg.android.ui.search
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -35,14 +34,11 @@ import androidx.compose.ui.unit.sp
 import co.touchlab.kermit.Logger
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.SubcomposeAsyncImage
-import coil.compose.rememberAsyncImagePainter
 import com.mes.topdawg.android.ui.theme.darkenColor
 import com.mes.topdawg.android.ui.theme.getRandomLightColor
 import com.mes.topdawg.android.ui.theme.orange200
 import com.mes.topdawg.common.data.local.entity.DogBreed
 import org.koin.androidx.compose.getViewModel
-
-const val HomeTag = "Home"
 
 @Composable
 @ExperimentalCoilApi
@@ -52,13 +48,9 @@ fun SearchScreen(
     dogBreedSelected: (dogBreed: DogBreed) -> Unit,
     searchScreenViewModel: SearchScreenViewModel = getViewModel()
 ) {
-    val logger = Logger.withTag("HomeScreen")
+    val logger = Logger.withTag("SearchScreen")
     val dogBreedSearchResultsState = searchScreenViewModel.dogBreedSearchResults.collectAsState()
     val searchQueryState = searchScreenViewModel.searchQueryState
-
-    LaunchedEffect(key1 = Unit) {
-        searchScreenViewModel.fetchRandomDogBreed()
-    }
 
     Scaffold(topBar = {
         TopAppBar(
@@ -95,7 +87,7 @@ fun SearchScreen(
                 }
                 DogBreeds(
                     dogBreeds = dogBreedSearchResults, dogBreedSelected = { breed ->
-                        searchScreenViewModel.setSelectedTopDogBreed(breed)
+                        logger.i("${breed.name} Selected.")
                     }, modifier = Modifier
                 )
             }

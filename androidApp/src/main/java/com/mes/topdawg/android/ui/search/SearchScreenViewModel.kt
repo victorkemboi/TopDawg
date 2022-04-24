@@ -18,14 +18,7 @@ class SearchScreenViewModel(
 
     val searchQueryState = mutableStateOf("")
 
-    private val topDogBreedMutableStateFlow: MutableStateFlow<DogBreed?> = MutableStateFlow(null)
-    val topDogBreed = topDogBreedMutableStateFlow.asStateFlow()
-
     var dogBreedSearchResults = MutableStateFlow<List<DogBreed>>(emptyList())
-
-    fun fetchRandomDogBreed() = viewModelScope.launch {
-        topDogBreedMutableStateFlow.value = breedsRepository.fetchRandomBreed()
-    }
 
     fun searchDogBreeds(query: String) =
         viewModelScope.launch {
@@ -33,8 +26,4 @@ class SearchScreenViewModel(
                 dogBreedSearchResults.value = it
             }
         }
-
-    fun setSelectedTopDogBreed(dogBreed: DogBreed) {
-        topDogBreedMutableStateFlow.value = dogBreed
-    }
 }
