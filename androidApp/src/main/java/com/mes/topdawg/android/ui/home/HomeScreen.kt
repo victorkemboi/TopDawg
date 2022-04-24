@@ -37,6 +37,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import co.touchlab.kermit.Logger
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.SubcomposeAsyncImage
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import com.mes.topdawg.android.ui.theme.darkenColor
 import com.mes.topdawg.android.ui.theme.getRandomLightColor
@@ -324,7 +325,7 @@ fun DogBreedGroupItemView(dogBreed: DogBreed, onSelected: (dogBreed: DogBreed) -
 
         if (dogBreed.imageUrl.isNotEmpty()) {
             Image(
-                painter = rememberImagePainter(dogBreed.imageUrl),
+                painter = rememberAsyncImagePainter(dogBreed.imageUrl),
                 modifier = Modifier.size(60.dp),
                 contentDescription = dogBreed.name
             )

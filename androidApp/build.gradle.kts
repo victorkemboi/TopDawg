@@ -22,6 +22,9 @@ android {
     buildFeatures {
         compose = true
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.2.0-alpha08"
+    }
 }
 
 dependencies {
@@ -45,6 +48,7 @@ dependencies {
     implementation(libs.compose.navigation)
     implementation(libs.coil.compose)
 
+    implementation(libs.kermit)
     implementation(libs.koin.android)
     implementation(libs.koin.android.compose)
     testImplementation(libs.koin.junit4)
