@@ -5,7 +5,7 @@ androidx-activity-compose = "1.5.0-alpha03"
 androidx-constraint-layout-compose = "1.0.0-beta02"
 androidx-lifecycle-ktx = "2.4.0-rc01"
 coil-compose = "2.0.0-rc02"
-compose = "1.2.0-alpha05"
+compose = "1.2.0-alpha08"
 compose-compiler = "1.2.0-alpha05"
 compose-desktop-web = "1.0.1"
 gradle-versions = "0.42.0"
@@ -69,11 +69,14 @@ koin-junit5 = { module = "io.insert-koin:koin-test-junit5", version.ref = "koin"
 koin-navigation-graph = { module = "io.insert-koin:koin-androidx-navigation", version.ref = "koin" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinx-serialization" }
+ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-ios = { module = "io.ktor:ktor-client-ios", version.ref = "ktor" }
+ktor-client-java = { module = "io.ktor:ktor-client-java", version.ref = "ktor" }
 ktor-client-json = { module = "io.ktor:ktor-client-json", version.ref = "ktor" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
-ktor-serialization-json = { module = "io.ktor:ktor-client-serialization", version.ref = "ktor" }
+ktor-client-serialization = { module = "io.ktor:ktor-client-serialization", version.ref = "ktor" }
 material-android = { module = "com.google.android.material:material", version.ref = "material-android" }
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 okio-fake-file-system = { module = "com.squareup.okio:okio-fakefilesystem", version.ref = "okio" }

@@ -7,7 +7,6 @@ import io.ktor.client.*
 import io.ktor.client.engine.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.logging.*
-import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -47,7 +46,7 @@ fun createJson() = Json { isLenient = true; ignoreUnknownKeys = true }
 fun createHttpClient(httpClientEngine: HttpClientEngine, json: Json, enableNetworkLogs: Boolean) =
     HttpClient(httpClientEngine) {
         install(ContentNegotiation) {
-            json(json)
+//            json(json)
         }
         if (enableNetworkLogs) {
             install(Logging) {
