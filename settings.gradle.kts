@@ -15,6 +15,3 @@ include(
     ":androidApp",
     ":common"
 )
-
-includeBuild("gradlePlugins")
-

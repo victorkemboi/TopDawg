@@ -1,7 +1,6 @@
 plugins {
     id("com.android.application")
     kotlin("android")
-    id("com.mes.topdawg.dependencies")
 }
 
 android {

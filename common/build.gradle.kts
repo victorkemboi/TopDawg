@@ -69,30 +69,23 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(libs.kotlinx.serialization.core)
                 implementation(libs.coroutines.core)
-                implementation(libs.coroutines.test)
-
-
+                implementation(libs.kermit)
+                implementation(libs.koin.core)
+                implementation(libs.kotlinx.serialization.core)
+                implementation(libs.okio)
                 implementation(libs.sqldelight.runtime)
                 implementation(libs.sqldelight.coroutines.ext)
-
-                implementation(libs.koin.core)
-                implementation(libs.koin.test)
-
-                implementation(libs.kermit)
-                implementation(libs.okio)
-
             }
         }
 
         val commonTest by getting {
             dependencies {
-                implementation(libs.koin.test)
                 implementation(libs.coroutines.test)
+                implementation(libs.koin.test)
+                implementation(libs.okio.fake.file.system)
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
-                implementation(libs.okio.fake.file.system)
             }
         }
         val androidMain by getting {
