@@ -92,7 +92,6 @@ class DogBreedsRepository : KoinComponent, DogBreedsRepositoryInterface {
     override suspend fun dumpDogBreedsToDatabase() {
         val breedsJson = ReadWriteFile().read(resId = FilePath.Breeds.toIntOrNull())
         logger.i { "Breeds read from file." }
-        logger.i { "Breeds: $breedsJson" }
         if (breedsJson == null) return
         logger.i { "Breeds from file string is not null" }
         val breeds =
