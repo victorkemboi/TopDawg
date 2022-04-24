@@ -1,13 +1,12 @@
-package com.mes.topdawg.android.ui.home
+package com.mes.topdawg.android.ui.search
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardActions
@@ -26,49 +25,38 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
 import co.touchlab.kermit.Logger
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.SubcomposeAsyncImage
-import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import com.mes.topdawg.android.ui.theme.darkenColor
 import com.mes.topdawg.android.ui.theme.getRandomLightColor
 import com.mes.topdawg.android.ui.theme.orange200
 import com.mes.topdawg.common.data.local.entity.DogBreed
 import org.koin.androidx.compose.getViewModel
 
-const val HomeTag = "Home"
-
 @Composable
 @ExperimentalCoilApi
 @ExperimentalComposeUiApi
-fun HomeScreen(
+fun SearchScreen(
     paddingValues: PaddingValues = PaddingValues(),
     dogBreedSelected: (dogBreed: DogBreed) -> Unit,
-    homeScreenViewModel: HomeScreenViewModel = getViewModel()
+    searchScreenViewModel: SearchScreenViewModel = getViewModel()
 ) {
-    val logger = Logger.withTag("HomeScreen")
-    val randomDogBreedState = homeScreenViewModel.topDogBreed.collectAsState()
-    val dogBreedSearchResultsState = homeScreenViewModel.dogBreedSearchResults.collectAsState()
-    val searchQueryState = homeScreenViewModel.searchQueryState
-
-    LaunchedEffect(key1 = Unit) {
-        homeScreenViewModel.fetchRandomDogBreed()
-    }
+    val logger = Logger.withTag("SearchScreen")
+    val dogBreedSearchResultsState = searchScreenViewModel.dogBreedSearchResults.collectAsState()
+    val searchQueryState = searchScreenViewModel.searchQueryState
 
     Scaffold(topBar = {
         TopAppBar(
             title = {
                 Text(
-                    text = "🦴 Top Dawg 🐩",
+                    text = "Top Dawg 🐩",
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
                     color = orange200
@@ -80,52 +68,26 @@ fun HomeScreen(
             backgroundColor = Color.Black
         )
     }) {
-        ConstraintLayout(modifier = Modifier
-            .padding(it)
-            .fillMaxSize()) {
-            val (randomDogBreed, searchView) = createRefs()
+        Column(
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
             Column(
-                modifier = Modifier
-                    .testTag(HomeTag)
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-                    .constrainAs(randomDogBreed) {
-                        top.linkTo(parent.top)
-                    }
+                modifier = Modifier.weight(1f)
             ) {
-                val breed = randomDogBreedState.value
-                if (breed != null) {
-                    logger.i { "The breed state is not empty: $breed" }
-                    DogBreedHighlight(
-                        dogBreed = breed,
-                        onSelected = dogBreedSelected,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentHeight()
-                            .padding(bottom = 8.dp),
-                        showBreedDescription = true
-                    )
-                } else {
-                    logger.i { "The breed state is empty." }
-//                    SideEffect {
-//                        homeScreenViewModel.fetchRandomDogBreed()
-//                    }
-                }
-
-                // search results
                 val dogBreedSearchResults = dogBreedSearchResultsState.value
-                Text(
-                    text = if (searchQueryState.value.isEmpty()) {
-                        "Dog breeds: "
-                    } else {
-                        "Search results: ${searchQueryState.value}"
-                    },
-                    modifier = Modifier.padding(top = 12.dp, bottom = 8.dp, start = 16.dp)
-                )
-
-                DogBreedsHorizontalList(
-                    dogBreeds = dogBreedSearchResults, dogBreedSelected = {
-                        homeScreenViewModel.setSelectedTopDogBreed(it)
+                if (searchQueryState.value.isNotEmpty()) {
+                    Text(
+                        text = "Search results: ${searchQueryState.value}",
+                        modifier = Modifier
+                            .padding(top = 12.dp, bottom = 8.dp, start = 16.dp)
+                    )
+                }
+                DogBreeds(
+                    dogBreeds = dogBreedSearchResults, dogBreedSelected = { breed ->
+                        logger.i("${breed.name} Selected.")
                     }, modifier = Modifier
                 )
             }
@@ -134,18 +96,15 @@ fun HomeScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .padding(top = 16.dp, bottom = paddingValues.calculateBottomPadding())
-                    .constrainAs(searchView) {
-                        bottom.linkTo(parent.bottom)
-                    },
+                    .padding(bottom = paddingValues.calculateBottomPadding()),
                 searchText = searchQueryState.value,
-                onSearchTextChanged = {
-                    searchQueryState.value = it
-                    homeScreenViewModel.searchDogBreeds(it)
+                onSearchTextChanged = { query ->
+                    searchQueryState.value = query
+                    searchScreenViewModel.searchDogBreeds(query)
                 },
                 onClearClick = {
                     searchQueryState.value = ""
-                    homeScreenViewModel.searchDogBreeds("")
+                    searchScreenViewModel.searchDogBreeds("")
                 },
             )
         }
@@ -154,29 +113,26 @@ fun HomeScreen(
 
 @ExperimentalCoilApi
 @Composable
-fun DogBreedsHorizontalList(
+fun DogBreeds(
     modifier: Modifier = Modifier,
     dogBreeds: List<DogBreed>,
     dogBreedSelected: (DogBreed) -> Unit = {},
 ) {
     if (dogBreeds.isNotEmpty()) {
 
-        BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
-            // LazyRow to display your items horizontally
-            LazyRow(
-                modifier = Modifier.fillMaxWidth(), state = rememberLazyListState()
-            ) {
-                itemsIndexed(items = dogBreeds) { index, item ->
-                    DogBreedHighlight(
-                        dogBreed = item,
-                        onSelected = dogBreedSelected,
-                        modifier = Modifier
-                            .width(200.dp)
-                            .wrapContentHeight()
-                            .padding(bottom = 8.dp, end = 32.dp),
-                        imageHeight = 100.dp
-                    )
-                }
+        LazyColumn(
+            modifier = modifier.fillMaxWidth(), state = rememberLazyListState()
+        ) {
+
+            itemsIndexed(items = dogBreeds) { _, item ->
+                DogBreedHighlight(
+                    dogBreed = item,
+                    onSelected = dogBreedSelected,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
+                    imageHeight = 200.dp
+                )
             }
         }
     } else {
@@ -199,35 +155,23 @@ fun DogBreedHighlight(
         contentColor ?: getRandomLightColor()
     }
 
-    val showImageLoadProgressIndicator = remember {
-        mutableStateOf(false)
-    }
-
     Column(
         modifier = modifier
             .clickable(onClick = { onSelected(dogBreed) }),
         horizontalAlignment = Alignment.Start
     ) {
 
-        Box(modifier = Modifier.height(imageHeight)) {
-            if (dogBreed.imageUrl.isNotEmpty()) {
-                if (showImageLoadProgressIndicator.value) {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                }
-
-                SubcomposeAsyncImage(
-                    model = dogBreed.imageUrl,
-                    loading = {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(25.dp)
-                        )
-                    },
-                    contentDescription = dogBreed.name,
-                    modifier = Modifier,
-                    contentScale = if (showBreedDescription) ContentScale.Fit else ContentScale.FillWidth
+        SubcomposeAsyncImage(
+            model = dogBreed.imageUrl,
+            loading = {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(25.dp)
                 )
-            }
-        }
+            },
+            contentDescription = dogBreed.name,
+            modifier = Modifier.height(imageHeight),
+            contentScale = if (showBreedDescription) ContentScale.Fit else ContentScale.FillWidth
+        )
 
         Column(
             modifier = Modifier
@@ -311,38 +255,4 @@ fun SearchView(
             keyboardController?.hide()
         }),
     )
-}
-
-@ExperimentalCoilApi
-@Composable
-fun DogBreedGroupItemView(dogBreed: DogBreed, onSelected: (dogBreed: DogBreed) -> Unit) {
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = { onSelected(dogBreed) })
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-
-        if (dogBreed.imageUrl.isNotEmpty()) {
-            Image(
-                painter = rememberAsyncImagePainter(dogBreed.imageUrl),
-                modifier = Modifier.size(60.dp),
-                contentDescription = dogBreed.name
-            )
-        } else {
-            Spacer(modifier = Modifier.size(60.dp))
-        }
-
-        Spacer(modifier = Modifier.size(12.dp))
-
-        Column {
-            Text(text = dogBreed.name, style = TextStyle(fontSize = 20.sp))
-            Text(
-                text = dogBreed.breedGroup,
-                style = TextStyle(color = Color.DarkGray, fontSize = 14.sp)
-            )
-        }
-    }
 }
