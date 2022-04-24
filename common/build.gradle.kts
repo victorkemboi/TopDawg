@@ -1,7 +1,4 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
-import com.mes.topdawg.DependenciesPlugin.Deps
-import com.mes.topdawg.DependenciesPlugin.Versions
 
 
 plugins {
@@ -12,19 +9,18 @@ plugins {
     id("com.squareup.sqldelight")
     id("com.rickclephas.kmp.nativecoroutines")
     id("com.chromaticnoise.multiplatform-swiftpackage") version "2.0.3"
-    id("com.mes.topdawg.dependencies")
 }
 
 // CocoaPods requires the podspec to have a version.
 version = "1.0"
 
 android {
-    compileSdk = Versions.androidCompileSdk
+    compileSdk = 31
     namespace = "com.mes.topdawg.android"
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
-        minSdk = Versions.androidMinSdk
-        targetSdk = Versions.androidTargetSdk
+        minSdk = 21
+        targetSdk = 32
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     compileOptions {
@@ -73,74 +69,53 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
+                implementation(libs.kotlinx.serialization.core)
+                implementation(libs.coroutines.core)
+                implementation(libs.coroutines.test)
 
-                with(Deps.Ktor) {
-                    implementation(clientCore)
-                    implementation(clientJson)
-                    implementation(clientLogging)
-                    implementation(contentNegotiation)
-                    implementation(json)
-                }
 
-                with(Deps.Kotlinx) {
-                    implementation(coroutinesCore)
-                    implementation(serializationCore)
-                }
+                implementation(libs.sqldelight.runtime)
+                implementation(libs.sqldelight.coroutines.ext)
 
-                with(Deps.SqlDelight) {
-                    implementation(runtime)
-                    implementation(coroutineExtensions)
-                }
+                implementation(libs.koin.core)
+                implementation(libs.koin.test)
 
-                with(Deps.Koin) {
-                    api(core)
-                    api(test)
-                }
+                implementation(libs.kermit)
+                implementation(libs.okio)
 
-                with(Deps.Log) {
-                    api(kermit)
-                }
-
-                with(Deps.File) {
-                    api(okio)
-                }
             }
         }
 
         val commonTest by getting {
             dependencies {
-                implementation(Deps.Koin.test)
-                implementation(Deps.Kotlinx.coroutinesTest)
+                implementation(libs.koin.test)
+                implementation(libs.coroutines.test)
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
-                implementation(Deps.File.okioFakeFileSystem)
+                implementation(libs.okio.fake.file.system)
             }
         }
         val androidMain by getting {
             dependencies {
-                implementation(Deps.Ktor.clientAndroid)
-                implementation(Deps.SqlDelight.androidDriver)
+                implementation(libs.sqldelight.driver.android)
             }
         }
 
         val androidTest by getting {
             dependencies {
-                implementation(Deps.Test.junit)
+                // Todo: Setup junit tests
             }
         }
 
         val jvmMain by getting {
             dependencies {
-                implementation(Deps.Ktor.clientJava)
-                implementation(Deps.SqlDelight.sqliteDriver)
-                implementation(Deps.Log.slf4j)
+                implementation(libs.sqldelight.driver.sqlite)
             }
         }
 
         val iOSMain by getting {
             dependencies {
-                implementation(Deps.Ktor.clientIos)
-                implementation(Deps.SqlDelight.nativeDriver)
+                implementation(libs.sqldelight.driver.native)
             }
         }
         val iOSTest by getting {

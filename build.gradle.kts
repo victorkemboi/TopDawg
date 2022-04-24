@@ -1,10 +1,11 @@
 plugins {
     id("org.jetbrains.kotlinx.kover") version "0.5.0"
     id("org.jmailen.kotlinter") version "3.9.0" apply false
+    id("com.github.ben-manes.versions") version "0.42.0"
 }
 
 buildscript {
-    
+
     repositories {
         google()
         mavenCentral()
@@ -16,9 +17,8 @@ buildscript {
         classpath(libs.gradlePlugin.android.gradle)
         classpath(libs.gradlePlugin.kotlin)
         classpath(libs.gradlePlugin.kotlin.serialization)
-        classpath(libs.gradlePlugin.sql.delight)
+        classpath(libs.gradlePlugin.sqldelight)
         classpath(libs.gradlePlugin.kotlinter)
-        classpath(libs.gradlePlugin.versions.plugin)
         classpath(libs.gradlePlugin.native.coroutines)
         classpath(libs.gradlePlugin.moko.resource.generator)
     }
