@@ -31,18 +31,22 @@ kotlinter = "3.9.0"
 gradle-versions-plugin = "0.39.0"
 native-coroutines = "0.11.1-new-mm"
 android-gradle-junit5 = "1.8.2.0"
+moko-resources-generator = "0.19.0"
 
 sql-delight = "1.5.3"
 
 gradlePlugin-android-gradle="7.3.0-alpha09"
 
 [libraries]
+gradlePlugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+gradlePlugin-kotlin-serialization = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
 gradlePlugin-android-gradle = { module = "com.android.tools.build:gradle", version.ref = "gradlePlugin-android-gradle" }
 gradlePlugin-kotlinter = { module = "org.jmailen.gradle:kotlinter-gradle", version.ref = "kotlinter" }
 gradlePlugin-sql-delight = { module = "com.squareup.sqldelight:gradle-plugin", version.ref = "sql-delight" }
 gradlePlugin-versions-plugin = { module = "com.github.ben-manes:gradle-versions-plugin", version.ref = "gradle-versions-plugin" }
 gradlePlugin-native-coroutines = { module = "com.rickclephas.kmp:kmp-nativecoroutines-gradle-plugin", version.ref = "native-coroutines" }
 gradlePlugin-android-junit5 = { module = "de.mannodermaus.gradle.plugins:android-junit5", version.ref = "android-gradle-junit5" }
+gradlePlugin-moko-resource-generator = { module = "dev.icerock.moko:resources-generator", version.ref = "moko-resources-generator" }
 
 kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinx-serialization" }
 coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlin-coroutines" }
