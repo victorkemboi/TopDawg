@@ -8,7 +8,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardActions
@@ -27,14 +26,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
 import co.touchlab.kermit.Logger
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.SubcomposeAsyncImage
@@ -56,7 +53,6 @@ fun SearchScreen(
     searchScreenViewModel: SearchScreenViewModel = getViewModel()
 ) {
     val logger = Logger.withTag("HomeScreen")
-    val randomDogBreedState = searchScreenViewModel.topDogBreed.collectAsState()
     val dogBreedSearchResultsState = searchScreenViewModel.dogBreedSearchResults.collectAsState()
     val searchQueryState = searchScreenViewModel.searchQueryState
 
@@ -80,37 +76,26 @@ fun SearchScreen(
             backgroundColor = Color.Black
         )
     }) {
-        ConstraintLayout(
+        Column(
             modifier = Modifier
                 .padding(it)
-                .fillMaxSize()
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            val (randomDogBreed, searchView) = createRefs()
             Column(
-                modifier = Modifier
-                    .testTag(HomeTag)
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-                    .constrainAs(randomDogBreed) {
-                        top.linkTo(parent.top)
-                    }
+                modifier = Modifier.weight(1f)
             ) {
-
-
-                // search results
                 val dogBreedSearchResults = dogBreedSearchResultsState.value
-                Text(
-                    text = if (searchQueryState.value.isEmpty()) {
-                        "Dog breeds: "
-                    } else {
-                        "Search results: ${searchQueryState.value}"
-                    },
-                    modifier = Modifier.padding(top = 12.dp, bottom = 8.dp, start = 16.dp)
-                )
-
+                if (searchQueryState.value.isNotEmpty()) {
+                    Text(
+                        text = "Search results: ${searchQueryState.value}",
+                        modifier = Modifier
+                            .padding(top = 12.dp, bottom = 8.dp, start = 16.dp)
+                    )
+                }
                 DogBreeds(
-                    dogBreeds = dogBreedSearchResults, dogBreedSelected = {
-                        searchScreenViewModel.setSelectedTopDogBreed(it)
+                    dogBreeds = dogBreedSearchResults, dogBreedSelected = { breed ->
+                        searchScreenViewModel.setSelectedTopDogBreed(breed)
                     }, modifier = Modifier
                 )
             }
@@ -119,14 +104,11 @@ fun SearchScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .padding(top = 16.dp, bottom = paddingValues.calculateBottomPadding())
-                    .constrainAs(searchView) {
-                        bottom.linkTo(parent.bottom)
-                    },
+                    .padding(bottom = paddingValues.calculateBottomPadding()),
                 searchText = searchQueryState.value,
-                onSearchTextChanged = {
-                    searchQueryState.value = it
-                    searchScreenViewModel.searchDogBreeds(it)
+                onSearchTextChanged = { query ->
+                    searchQueryState.value = query
+                    searchScreenViewModel.searchDogBreeds(query)
                 },
                 onClearClick = {
                     searchQueryState.value = ""
@@ -149,14 +131,14 @@ fun DogBreeds(
         LazyColumn(
             modifier = modifier.fillMaxWidth(), state = rememberLazyListState()
         ) {
-            itemsIndexed(items = dogBreeds) { index, item ->
+
+            itemsIndexed(items = dogBreeds) { _, item ->
                 DogBreedHighlight(
                     dogBreed = item,
                     onSelected = dogBreedSelected,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .wrapContentHeight()
-                        .padding(bottom = 8.dp, end = 32.dp),
+                        .wrapContentHeight(),
                     imageHeight = 200.dp
                 )
             }
@@ -180,7 +162,6 @@ fun DogBreedHighlight(
     val contentColorState = remember {
         contentColor ?: getRandomLightColor()
     }
-
 
     Column(
         modifier = modifier
@@ -282,38 +263,4 @@ fun SearchView(
             keyboardController?.hide()
         }),
     )
-}
-
-@ExperimentalCoilApi
-@Composable
-fun DogBreedGroupItemView(dogBreed: DogBreed, onSelected: (dogBreed: DogBreed) -> Unit) {
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = { onSelected(dogBreed) })
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-
-        if (dogBreed.imageUrl.isNotEmpty()) {
-            Image(
-                painter = rememberAsyncImagePainter(dogBreed.imageUrl),
-                modifier = Modifier.size(60.dp),
-                contentDescription = dogBreed.name
-            )
-        } else {
-            Spacer(modifier = Modifier.size(60.dp))
-        }
-
-        Spacer(modifier = Modifier.size(12.dp))
-
-        Column {
-            Text(text = dogBreed.name, style = TextStyle(fontSize = 20.sp))
-            Text(
-                text = dogBreed.breedGroup,
-                style = TextStyle(color = Color.DarkGray, fontSize = 14.sp)
-            )
-        }
-    }
 }
