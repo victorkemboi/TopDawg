@@ -81,6 +81,7 @@ kotlin {
                 implementation(libs.kermit)
                 implementation(libs.koin.core)
                 implementation(libs.kotlinx.serialization.core)
+                implementation(libs.kotlinx.datetime)
 
                 implementation(libs.ktor.client.core)
                 implementation(libs.ktor.client.json)

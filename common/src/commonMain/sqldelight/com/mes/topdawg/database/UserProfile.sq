@@ -3,3 +3,24 @@ id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 name TEXT NOT NULL,
 profileImageUrl TEXT
 );
+
+saveUserProfile:
+INSERT OR REPLACE INTO SqlUserProfile VALUES(?,?,?);
+
+fetchUserProfileById:
+SELECT * FROM SqlUserProfile WHERE id=:id LIMIT 1;
+
+
+CREATE TABLE SqlActiveProfile (
+id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+loggedOut INTEGER AS Boolean DEFAULT 0 NOT NULL,
+createdAt INTEGER NOT NULL,
+userProfileId INTEGER NOT NULL,
+FOREIGN KEY (userProfileId) REFERENCES SqlUserProfile(id) ON DELETE CASCADE
+);
+
+fetchActiveProfile:
+SELECT * FROM SqlActiveProfile ORDER BY createdAt DESC LIMIT 1;
+
+login:
+INSERT OR REPLACE INTO SqlActiveProfile VALUES(?,?,?,?);
