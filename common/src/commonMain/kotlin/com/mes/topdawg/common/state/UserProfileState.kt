@@ -4,23 +4,30 @@ package com.mes.topdawg.common.state
 
 import com.mes.topdawg.common.data.local.entity.UserProfile
 import com.mes.topdawg.common.data.repository.AuthRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import kotlin.jvm.JvmName
 
+interface StateMachine<S, E> {
+    val currentState: StateFlow<S>
+    suspend fun transition(event: E)
+}
+
 class UserProfileStateMachine(
-    scope: CoroutineScope = CoroutineScope(Job() + Dispatchers.Main),
-    private val authRepository: AuthRepository
-) {
+    dispatcher: CoroutineDispatcher = Dispatchers.Main
+) : StateMachine<UserProfileState, UserProfileEvent>, KoinComponent {
+
+    private val authRepository: AuthRepository by inject()
+    private val scope: CoroutineScope = CoroutineScope(Job() + dispatcher)
+
     private val _currentState: MutableStateFlow<UserProfileState> =
         MutableStateFlow(UserProfileState.LoggedOut)
-    val currentState: StateFlow<UserProfileState> = _currentState.asStateFlow()
+    override val currentState: StateFlow<UserProfileState> = _currentState.asStateFlow()
 
     init {
         scope.launch {
@@ -34,7 +41,7 @@ class UserProfileStateMachine(
         }
     }
 
-    suspend fun transition(event: UserProfileEvent) {
+    override suspend fun transition(event: UserProfileEvent) {
         when (event) {
             is UserProfileEvent.InitLogin -> {
                 login(event.userProfileId)

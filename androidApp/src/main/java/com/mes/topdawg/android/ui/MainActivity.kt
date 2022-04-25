@@ -115,7 +115,7 @@ fun MainLayout() {
             }
         ) { paddingValues ->
 
-            AnimatedNavHost(navController, startDestination = Screen.Home.title) {
+            AnimatedNavHost(navController, startDestination = Screen.Welcome.title) {
                 composable(
                     route = Screen.Home.title,
                     exitTransition = {
@@ -181,7 +181,7 @@ fun MainLayout() {
                 }
 
                 composable(
-                    route = Screen.Home.title,
+                    route = Screen.Welcome.title,
                     exitTransition = {
                         slideOutHorizontally() +
                                 fadeOut(animationSpec = tween(1000))
