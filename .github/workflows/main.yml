@@ -9,7 +9,7 @@ env:
   CACHE_BUNDLER: ~/.bundler
 
 jobs:
-  build:
+  lint-check:
     runs-on: macos-latest
     steps:
 
