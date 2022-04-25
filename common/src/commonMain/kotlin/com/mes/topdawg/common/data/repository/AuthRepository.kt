@@ -9,13 +9,24 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 interface AuthRepository {
+    suspend fun fetchLoggedInUser(): UserProfile?
     suspend fun login(userId: Long): UserProfile?
+    suspend fun logout()
 }
 
 class AuthRepositoryImpl : AuthRepository, KoinComponent {
-    private val logger = Logger.withTag("BreedsRepository")
+    private val logger = Logger.withTag("AuthRepository")
     private val topDawgDatabase: TopDawgDatabaseWrapper by inject()
     private val userProfileQueries = topDawgDatabase.instance?.userProfileQueries
+
+    override suspend fun fetchLoggedInUser(): UserProfile? {
+        val activeUserProfile =
+            userProfileQueries?.fetchActiveProfile()?.executeAsOneOrNull() ?: return null
+        val userProfile =
+            userProfileQueries.fetchUserProfileById(activeUserProfile.userProfileId)
+                .executeAsOneOrNull() ?: return null
+        return userProfile.toUserProfile()
+    }
 
     override suspend fun login(userId: Long): UserProfile? {
         logger.i { "Logging in." }
@@ -23,7 +34,6 @@ class AuthRepositoryImpl : AuthRepository, KoinComponent {
             userProfileQueries?.fetchUserProfileById(userId)?.executeAsOneOrNull() ?: return null
         userProfileQueries.login(
             id = null,
-            loggedOut = false,
             createdAt = Clock.System.now().toEpochMilliseconds(),
             userProfileId = userProfile.id
         )
@@ -35,6 +45,10 @@ class AuthRepositoryImpl : AuthRepository, KoinComponent {
             """.trimIndent()
         }
         return userProfile.toUserProfile()
+    }
+
+    override suspend fun logout() {
+        userProfileQueries?.logout()
     }
 
 
