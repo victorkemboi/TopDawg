@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 fun <T> Flow<T>.collectAsStateWithLifecycle(
     owner: LifecycleOwner,
     initial: T,
-    minActiveState: Lifecycle.State = Lifecycle.State.STARTED,
+    minActiveState: Lifecycle.State = Lifecycle.State.STARTED
 ): State<T> {
     return remember(this, owner) {
         flowWithLifecycle(owner.lifecycle, minActiveState)

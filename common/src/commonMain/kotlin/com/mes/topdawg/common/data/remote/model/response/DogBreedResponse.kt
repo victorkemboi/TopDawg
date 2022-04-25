@@ -20,7 +20,7 @@ data class DogBreedApiResponse(
     val bred_for: String? = null,
     val origin: String? = null,
     val breed_group: String? = null,
-    val country_code: String? = null,
+    val country_code: String? = null
 )
 
 @Serializable
