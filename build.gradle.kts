@@ -1,8 +1,8 @@
 plugins {
-    alias(libs.plugins.detekt)
     alias(libs.plugins.gradle.versions)
     alias(libs.plugins.kover)
-    alias(libs.plugins.kotlinter)
+    id("org.jmailen.kotlinter") version "3.10.0" apply false
+    alias(libs.plugins.detekt)
 }
 
 buildscript {
@@ -26,14 +26,18 @@ buildscript {
 }
 
 allprojects {
-    apply(plugin = "org.jmailen.kotlinter")
+//    apply(plugin = "org.jmailen.kotlinter")
+//
+//    kotlinter {
+//        ignoreFailures = false
+//        reporters = arrayOf("checkstyle", "plain")
+//        experimentalRules = true
+//        disabledRules = arrayOf("no-wildcard-imports")
+//    }
 
-    kotlinter {
-        ignoreFailures = false
-        reporters = arrayOf("checkstyle", "plain")
-        experimentalRules = true
-        disabledRules = arrayOf("no-wildcard-imports")
-    }
+//    tasks.li {
+//        exclude("./common/build/generated/**/*.kt")
+//    }
 
     repositories {
         google()
