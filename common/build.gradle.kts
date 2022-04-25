@@ -38,7 +38,9 @@ kotlinter {
 }
 
 tasks.lintKotlinCommonMain {
-    exclude("./common/build/generated/**/*.kt")
+//    exclude("./common/build/generated/**/*.kt")
+//    exclude("${project.rootDir}/common/build/**/*.kt")
+    exclude("**/generated/**")
 }
 
 kotlin {
