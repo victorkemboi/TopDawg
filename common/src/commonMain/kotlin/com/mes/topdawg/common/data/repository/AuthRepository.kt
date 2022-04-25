@@ -50,6 +50,4 @@ class AuthRepositoryImpl : AuthRepository, KoinComponent {
     override suspend fun logout() {
         userProfileQueries?.logout()
     }
-
-
 }
