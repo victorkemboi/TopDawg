@@ -27,7 +27,7 @@ val dogBreedEntityMapper: (
         lifeSpan = lifeSpan ?: "",
         name = name,
         origin = origin ?: "",
-        temperament = temperament ?: "",
+        temperament = temperament ?: ""
     )
 }
 

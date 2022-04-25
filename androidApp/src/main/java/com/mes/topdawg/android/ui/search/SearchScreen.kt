@@ -86,9 +86,11 @@ fun SearchScreen(
                     )
                 }
                 DogBreeds(
-                    dogBreeds = dogBreedSearchResults, dogBreedSelected = { breed ->
+                    dogBreeds = dogBreedSearchResults,
+                    dogBreedSelected = { breed ->
                         logger.i("${breed.name} Selected.")
-                    }, modifier = Modifier
+                    },
+                    modifier = Modifier
                 )
             }
 
@@ -105,7 +107,7 @@ fun SearchScreen(
                 onClearClick = {
                     searchQueryState.value = ""
                     searchScreenViewModel.searchDogBreeds("")
-                },
+                }
             )
         }
     }
@@ -116,14 +118,13 @@ fun SearchScreen(
 fun DogBreeds(
     modifier: Modifier = Modifier,
     dogBreeds: List<DogBreed>,
-    dogBreedSelected: (DogBreed) -> Unit = {},
+    dogBreedSelected: (DogBreed) -> Unit = {}
 ) {
     if (dogBreeds.isNotEmpty()) {
-
         LazyColumn(
-            modifier = modifier.fillMaxWidth(), state = rememberLazyListState()
+            modifier = modifier.fillMaxWidth(),
+            state = rememberLazyListState()
         ) {
-
             itemsIndexed(items = dogBreeds) { _, item ->
                 DogBreedHighlight(
                     dogBreed = item,
@@ -160,7 +161,6 @@ fun DogBreedHighlight(
             .clickable(onClick = { onSelected(dogBreed) }),
         horizontalAlignment = Alignment.Start
     ) {
-
         SubcomposeAsyncImage(
             model = dogBreed.imageUrl,
             loading = {
@@ -181,12 +181,14 @@ fun DogBreedHighlight(
                 .padding(bottom = 8.dp, start = 16.dp, end = 16.dp)
         ) {
             Text(
-                text = dogBreed.name, style = TextStyle(fontSize = 20.sp),
+                text = dogBreed.name,
+                style = TextStyle(fontSize = 20.sp),
                 modifier = Modifier.padding(top = 12.dp)
             )
             if (showBreedDescription) {
                 Text(
-                    text = dogBreed.bredFor, style = TextStyle(fontSize = 16.sp)
+                    text = dogBreed.bredFor,
+                    style = TextStyle(fontSize = 16.sp)
                 )
             }
             Text(
@@ -204,9 +206,8 @@ fun SearchView(
     searchText: String = "",
     placeholderText: String = "Search...",
     onSearchTextChanged: (String) -> Unit = {},
-    onClearClick: () -> Unit = {},
+    onClearClick: () -> Unit = {}
 ) {
-
     var showClearButton by remember { mutableStateOf(false) }
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
@@ -233,7 +234,9 @@ fun SearchView(
         ),
         trailingIcon = {
             AnimatedVisibility(
-                visible = showClearButton, enter = fadeIn(), exit = fadeOut()
+                visible = showClearButton,
+                enter = fadeIn(),
+                exit = fadeOut()
             ) {
                 IconButton(onClick = {
                     if (searchText.isEmpty()) {
@@ -243,7 +246,8 @@ fun SearchView(
                     }
                 }) {
                     Icon(
-                        imageVector = Icons.Filled.Close, contentDescription = "Close icon"
+                        imageVector = Icons.Filled.Close,
+                        contentDescription = "Close icon"
                     )
                 }
             }
@@ -253,6 +257,6 @@ fun SearchView(
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(onDone = {
             keyboardController?.hide()
-        }),
+        })
     )
 }

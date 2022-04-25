@@ -3,11 +3,12 @@ package com.mes.topdawg.common.utils
 import okio.FileSystem
 import okio.Path.Companion.toPath
 
+object Utils
 actual class ReadWriteFile {
     actual fun read(
         path: String?,
         filename: String?,
-        resId: Int?,
+        resId: Int?
     ): String? =
         FileSystem.SYSTEM.read("$path/$filename".toPath()) {
             readUtf8()

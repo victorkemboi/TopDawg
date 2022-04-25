@@ -38,7 +38,6 @@ import co.touchlab.kermit.Logger
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import com.mes.topdawg.android.ui.theme.darkenColor
 import com.mes.topdawg.android.ui.theme.getRandomLightColor
 import com.mes.topdawg.android.ui.theme.orange200
@@ -80,9 +79,11 @@ fun HomeScreen(
             backgroundColor = Color.Black
         )
     }) {
-        ConstraintLayout(modifier = Modifier
-            .padding(it)
-            .fillMaxSize()) {
+        ConstraintLayout(
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize()
+        ) {
             val (randomDogBreed, searchView) = createRefs()
             Column(
                 modifier = Modifier
@@ -124,9 +125,11 @@ fun HomeScreen(
                 )
 
                 DogBreedsHorizontalList(
-                    dogBreeds = dogBreedSearchResults, dogBreedSelected = {
+                    dogBreeds = dogBreedSearchResults,
+                    dogBreedSelected = {
                         homeScreenViewModel.setSelectedTopDogBreed(it)
-                    }, modifier = Modifier
+                    },
+                    modifier = Modifier
                 )
             }
 
@@ -146,7 +149,7 @@ fun HomeScreen(
                 onClearClick = {
                     searchQueryState.value = ""
                     homeScreenViewModel.searchDogBreeds("")
-                },
+                }
             )
         }
     }
@@ -157,14 +160,14 @@ fun HomeScreen(
 fun DogBreedsHorizontalList(
     modifier: Modifier = Modifier,
     dogBreeds: List<DogBreed>,
-    dogBreedSelected: (DogBreed) -> Unit = {},
+    dogBreedSelected: (DogBreed) -> Unit = {}
 ) {
     if (dogBreeds.isNotEmpty()) {
-
         BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
             // LazyRow to display your items horizontally
             LazyRow(
-                modifier = Modifier.fillMaxWidth(), state = rememberLazyListState()
+                modifier = Modifier.fillMaxWidth(),
+                state = rememberLazyListState()
             ) {
                 itemsIndexed(items = dogBreeds) { index, item ->
                     DogBreedHighlight(
@@ -208,7 +211,6 @@ fun DogBreedHighlight(
             .clickable(onClick = { onSelected(dogBreed) }),
         horizontalAlignment = Alignment.Start
     ) {
-
         Box(modifier = Modifier.height(imageHeight)) {
             if (dogBreed.imageUrl.isNotEmpty()) {
                 if (showImageLoadProgressIndicator.value) {
@@ -237,12 +239,14 @@ fun DogBreedHighlight(
                 .padding(bottom = 8.dp, start = 16.dp, end = 16.dp)
         ) {
             Text(
-                text = dogBreed.name, style = TextStyle(fontSize = 20.sp),
+                text = dogBreed.name,
+                style = TextStyle(fontSize = 20.sp),
                 modifier = Modifier.padding(top = 12.dp)
             )
             if (showBreedDescription) {
                 Text(
-                    text = dogBreed.bredFor, style = TextStyle(fontSize = 16.sp)
+                    text = dogBreed.bredFor,
+                    style = TextStyle(fontSize = 16.sp)
                 )
             }
             Text(
@@ -260,9 +264,8 @@ fun SearchView(
     searchText: String = "",
     placeholderText: String = "Search...",
     onSearchTextChanged: (String) -> Unit = {},
-    onClearClick: () -> Unit = {},
+    onClearClick: () -> Unit = {}
 ) {
-
     var showClearButton by remember { mutableStateOf(false) }
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
@@ -289,7 +292,9 @@ fun SearchView(
         ),
         trailingIcon = {
             AnimatedVisibility(
-                visible = showClearButton, enter = fadeIn(), exit = fadeOut()
+                visible = showClearButton,
+                enter = fadeIn(),
+                exit = fadeOut()
             ) {
                 IconButton(onClick = {
                     if (searchText.isEmpty()) {
@@ -299,7 +304,8 @@ fun SearchView(
                     }
                 }) {
                     Icon(
-                        imageVector = Icons.Filled.Close, contentDescription = "Close icon"
+                        imageVector = Icons.Filled.Close,
+                        contentDescription = "Close icon"
                     )
                 }
             }
@@ -309,14 +315,13 @@ fun SearchView(
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(onDone = {
             keyboardController?.hide()
-        }),
+        })
     )
 }
 
 @ExperimentalCoilApi
 @Composable
 fun DogBreedGroupItemView(dogBreed: DogBreed, onSelected: (dogBreed: DogBreed) -> Unit) {
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -324,7 +329,6 @@ fun DogBreedGroupItemView(dogBreed: DogBreed, onSelected: (dogBreed: DogBreed) -
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-
         if (dogBreed.imageUrl.isNotEmpty()) {
             Image(
                 painter = rememberAsyncImagePainter(dogBreed.imageUrl),

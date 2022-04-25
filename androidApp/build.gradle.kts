@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     kotlin("android")
+    id("org.jmailen.kotlinter")
 }
 
 android {
@@ -25,6 +26,13 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.2.0-alpha08"
     }
+}
+
+kotlinter {
+    ignoreFailures = false
+    reporters = arrayOf("checkstyle", "plain")
+    experimentalRules = true
+    disabledRules = arrayOf("no-wildcard-imports")
 }
 
 dependencies {

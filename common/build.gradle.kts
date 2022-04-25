@@ -8,6 +8,7 @@ plugins {
     id("org.jetbrains.kotlin.native.cocoapods")
     id("com.squareup.sqldelight")
     id("com.rickclephas.kmp.nativecoroutines")
+    id("org.jmailen.kotlinter")
     id("com.chromaticnoise.multiplatform-swiftpackage") version "2.0.3"
 }
 
@@ -27,6 +28,13 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+}
+
+kotlinter {
+    ignoreFailures = false
+    reporters = arrayOf("checkstyle", "plain")
+    experimentalRules = true
+    disabledRules = arrayOf("no-wildcard-imports")
 }
 
 kotlin {
@@ -152,6 +160,18 @@ sqldelight {
         packageName = "com.mes.topdawg.topdawg.db"
         sourceFolders = listOf("sqldelight")
     }
+}
+
+tasks.lintKotlinCommonMain {
+    exclude("com/mes/topdawg/topdawg/db/*.kt")
+    exclude("com/mes/topdawg/topdawg/db/common/*.kt")
+    exclude("com/mes/topdawg/database/*.kt")
+}
+
+tasks.formatKotlinCommonMain {
+    exclude("com/mes/topdawg/topdawg/db/*.kt")
+    exclude("com/mes/topdawg/topdawg/db/common/*.kt")
+    exclude("com/mes/topdawg/database/*.kt")
 }
 
 multiplatformSwiftPackage {

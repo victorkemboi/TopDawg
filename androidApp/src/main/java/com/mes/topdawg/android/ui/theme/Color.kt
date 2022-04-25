@@ -29,12 +29,17 @@ val green200 = Color(0xFFC5E1A5)
 fun getRandomColor() = listOf(
     maroon200, maroon500, maroon700, teal200,
     orange200, orange500, orange700,
-    purple200, purple500, purple700,
+    purple200, purple500, purple700
 ).random()
 
 fun getRandomLightColor() = listOf(
-    teal200, orange200, purple200,
-    yellow200, pink200, red200, green200
+    teal200,
+    orange200,
+    purple200,
+    yellow200,
+    pink200,
+    red200,
+    green200
 ).random()
 
 fun Color.darkenColor() =

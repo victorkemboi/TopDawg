@@ -1,0 +1,49 @@
+name: branch
+
+on:
+  push:
+    branches-ignore: [ main ]
+
+concurrency:
+  group: environment-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  APP_SIGN_KEYSTORE_PATH: /tmp/keystore
+  CACHE_BUNDLER: ~/.bundler
+
+jobs:
+  lint-check:
+    runs-on: macos-latest
+    steps:
+
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+
+      - name: set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+
+      - name: Cache gradle
+        uses: actions/cache@v1
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Bundler cache
+        uses: actions/cache@v1
+        with:
+          path: $CACHE_BUNDLER
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
+
+      - name: Lint
+        run: ./gradlew lintKotlin && ./gradlew detekt
