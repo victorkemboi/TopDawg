@@ -1,5 +1,6 @@
 package com.mes.topdawg.common.data.local.entity
 
+import com.mes.topdawg.database.SqlDogBreeds
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -16,5 +17,44 @@ data class DogBreed(
     val temperament: String
 )
 
-@Serializable
-data class DogBreeds(val result: List<DogBreed>)
+val sqlDogBreedMapper: (
+    Long,
+    String,
+    String?,
+    String?,
+    String?,
+    String?,
+    String?,
+    String,
+    String?,
+    String?,
+    String?
+) -> DogBreed = { id, bredFor, breedGroup, height, weight, imageUrl, lifeSpan,
+                  name, origin, temperament, _ ->
+    DogBreed(
+        id = id,
+        bredFor = bredFor,
+        breedGroup = breedGroup ?: "",
+        height = height ?: "",
+        weight = weight ?: "",
+        imageUrl = imageUrl ?: "",
+        lifeSpan = lifeSpan ?: "",
+        name = name,
+        origin = origin ?: "",
+        temperament = temperament ?: ""
+    )
+}
+
+fun SqlDogBreeds.toDogBreed() =
+    DogBreed(
+        id = this.id,
+        bredFor = this.bredFor,
+        breedGroup = this.breedGroup ?: "",
+        height = this.height ?: "",
+        weight = this.weight ?: "",
+        imageUrl = this.imageUrl ?: "",
+        lifeSpan = this.lifeSpan ?: "",
+        name = this.name,
+        origin = this.origin ?: "",
+        temperament = this.temperament ?: ""
+    )

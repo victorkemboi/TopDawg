@@ -2,9 +2,9 @@ package com.mes.topdawg.common.data.repository
 
 import co.touchlab.kermit.Logger
 import com.mes.topdawg.common.data.local.TopDawgDatabaseWrapper
-import com.mes.topdawg.common.data.local.dogBreedEntityMapper
 import com.mes.topdawg.common.data.local.entity.DogBreed
-import com.mes.topdawg.common.data.local.toDogBreed
+import com.mes.topdawg.common.data.local.entity.sqlDogBreedMapper
+import com.mes.topdawg.common.data.local.entity.toDogBreed
 import com.mes.topdawg.common.data.remote.model.response.DogBreedApiResponse
 import com.mes.topdawg.common.utils.FilePath
 import com.mes.topdawg.common.utils.ReadWriteFile
@@ -51,7 +51,7 @@ class DogBreedsRepository : KoinComponent, DogBreedsRepositoryInterface {
     }
 
     override fun fetchAllBreedsAsFlow(): Flow<List<DogBreed>> = dogBreedsQueries?.selectAll(
-        mapper = dogBreedEntityMapper
+        mapper = sqlDogBreedMapper
     )?.asFlow()?.mapToList() ?: flowOf(emptyList())
 
     override suspend fun fetchBreedByIdAsFlow(id: Long): Flow<DogBreed?> =
@@ -74,7 +74,7 @@ class DogBreedsRepository : KoinComponent, DogBreedsRepositoryInterface {
         } else {
             dogBreedsQueries?.search(
                 query = "%$query%",
-                mapper = dogBreedEntityMapper
+                mapper = sqlDogBreedMapper
             )?.asFlow()?.mapToList() ?: flowOf(emptyList())
         }
 

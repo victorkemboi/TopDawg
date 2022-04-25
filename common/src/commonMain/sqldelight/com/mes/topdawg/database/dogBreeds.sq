@@ -1,4 +1,4 @@
-CREATE TABLE DogBreedsEntity(
+CREATE TABLE SqlDogBreeds(
 id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 bredFor TEXT NOT NULL,
 breedGroup TEXT,
@@ -13,22 +13,22 @@ searchString TEXT
 );
 
 insertItem:
-INSERT OR REPLACE INTO DogBreedsEntity VALUES(?,?,?,?,?,?,?,?,?,?,?);
+INSERT OR REPLACE INTO SqlDogBreeds VALUES(?,?,?,?,?,?,?,?,?,?,?);
 
 selectAll:
-SELECT * FROM DogBreedsEntity ;
+SELECT * FROM SqlDogBreeds ;
 
 search:
-SELECT * FROM DogBreedsEntity  WHERE searchString LIKE (:query);
+SELECT * FROM SqlDogBreeds  WHERE searchString LIKE (:query);
 
 fetchById:
-SELECT * FROM DogBreedsEntity WHERE id=:id;
+SELECT * FROM SqlDogBreeds WHERE id=:id;
 
 deleteAll:
-DELETE FROM DogBreedsEntity;
+DELETE FROM SqlDogBreeds;
 
 countAll:
-SELECT COUNT(*) FROM DogBreedsEntity;
+SELECT COUNT(*) FROM SqlDogBreeds;
 
 count:
-SELECT COUNT(*) FROM DogBreedsEntity  WHERE searchString LIKE (:query);
+SELECT COUNT(*) FROM SqlDogBreeds WHERE searchString LIKE (:query);
