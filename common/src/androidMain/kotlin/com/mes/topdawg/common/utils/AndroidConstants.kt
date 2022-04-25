@@ -2,7 +2,7 @@ package com.mes.topdawg.common.utils
 
 import com.mes.topdawg.android.R
 
-object Constants
+object AndroidConstants
 
 actual object FilePath {
     actual val Breeds: String = R.raw.breeds.toString()

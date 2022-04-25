@@ -6,7 +6,7 @@ import okio.Path.Companion.toPath
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-object Utils
+object AndroidUtils
 
 actual class ReadWriteFile : KoinComponent {
     private val context: Context by inject()
