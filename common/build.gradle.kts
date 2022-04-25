@@ -37,12 +37,6 @@ kotlinter {
     disabledRules = arrayOf("no-wildcard-imports")
 }
 
-tasks.lintKotlinCommonMain {
-//    exclude("./common/build/generated/**/*.kt")
-//    exclude("${project.rootDir}/common/build/**/*.kt")
-    exclude("**/generated/**")
-}
-
 kotlin {
     val iosTarget: (String, org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget.() -> Unit) -> org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget =
         when {
@@ -166,6 +160,18 @@ sqldelight {
         packageName = "com.mes.topdawg.topdawg.db"
         sourceFolders = listOf("sqldelight")
     }
+}
+
+tasks.lintKotlinCommonMain {
+    exclude("com/mes/topdawg/topdawg/db/*.kt")
+    exclude("com/mes/topdawg/topdawg/db/common/*.kt")
+    exclude("com/mes/topdawg/database/*.kt")
+}
+
+tasks.formatKotlinCommonMain {
+    exclude("com/mes/topdawg/topdawg/db/*.kt")
+    exclude("com/mes/topdawg/topdawg/db/common/*.kt")
+    exclude("com/mes/topdawg/database/*.kt")
 }
 
 multiplatformSwiftPackage {
