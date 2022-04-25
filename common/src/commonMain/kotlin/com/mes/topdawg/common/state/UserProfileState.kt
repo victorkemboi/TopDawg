@@ -18,9 +18,13 @@ interface StateMachine<S, E> {
     suspend fun transition(event: E)
 }
 
-class UserProfileStateMachine(
+interface UserProfileStateMachine<S, E> : StateMachine<S, E> {
+    suspend fun login(userProfileId: Long)
+}
+
+class UserProfileStateMachineImpl(
     dispatcher: CoroutineDispatcher = Dispatchers.Main
-) : StateMachine<UserProfileState, UserProfileEvent>, KoinComponent {
+) : UserProfileStateMachine<UserProfileState, UserProfileEvent>, KoinComponent {
 
     private val authRepository: AuthRepository by inject()
     private val scope: CoroutineScope = CoroutineScope(Job() + dispatcher)
@@ -61,7 +65,7 @@ class UserProfileStateMachine(
         }
     }
 
-    private suspend fun login(userProfileId: Long) {
+    override suspend fun login(userProfileId: Long) {
         _currentState.update { UserProfileState.LoggingIn }
         val loggedInUserProfile = authRepository.login(userId = userProfileId)
         val sideEffect = if (loggedInUserProfile != null) {

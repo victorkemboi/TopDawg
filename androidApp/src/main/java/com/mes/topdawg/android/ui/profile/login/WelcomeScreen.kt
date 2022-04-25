@@ -4,9 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -25,7 +23,7 @@ fun WelcomeScreen(
     navController: NavController,
     viewModel: WelcomeScreenViewModel = getViewModel()
 ) {
-    val uiState = viewModel.uiState.collectAsState()
+    val uiState = viewModel.profileState.collectAsState()
     Scaffold(topBar = {
         TopAppBar(
             title = {
@@ -45,23 +43,28 @@ fun WelcomeScreen(
         Column(modifier = Modifier.padding(it)) {
             when (uiState.value) {
                 is UserProfileState.LoggingIn -> {
-
+                    CircularProgressIndicator()
+                    Text(text = "LoggingIn", modifier = Modifier)
                 }
                 is UserProfileState.LoginSuccess -> {
-
+                    Text(text = "LoginSuccess", modifier = Modifier, color = Color.Green)
                 }
                 is UserProfileState.LoginFailed -> {
-
+                    Text(text = "LoginFailed", modifier = Modifier, color = Color.Red)
                 }
                 is UserProfileState.LoggedIn -> {
-
+                    Text(text = "LoggedIn", modifier = Modifier)
                 }
                 is UserProfileState.LoggingOut -> {
-
+                    CircularProgressIndicator()
+                    Text(text = "LoggingOut", modifier = Modifier)
                 }
                 is UserProfileState.LoggedOut -> {
-
+                    Text(text = "LoggedOut", modifier = Modifier)
                 }
+            }
+            Button(onClick = { /*TODO*/ }, ) {
+                Text(text = "")
             }
         }
     }
