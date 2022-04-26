@@ -1,4 +1,4 @@
-CREATE TABLE Dog(
+CREATE TABLE SqlDog(
 id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 name TEXT NOT NULL,
 profileImageUrl TEXT,
@@ -7,10 +7,10 @@ breed INTEGER
 );
 
 insertItem:
-INSERT OR REPLACE INTO Dog VALUES(?,?,?,?,?);
+INSERT OR REPLACE INTO SqlDog VALUES(?,?,?,?,?);
 
 selectAll:
-SELECT * FROM Dog;
+SELECT * FROM SqlDog;
 
 deleteAll:
-DELETE FROM Dog;
+DELETE FROM SqlDog;

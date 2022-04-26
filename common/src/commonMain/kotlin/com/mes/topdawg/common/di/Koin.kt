@@ -2,8 +2,11 @@
 
 package com.mes.topdawg.common.di
 
+import com.mes.topdawg.common.data.repository.AuthRepository
+import com.mes.topdawg.common.data.repository.AuthRepositoryImpl
 import com.mes.topdawg.common.data.repository.DogBreedsRepository
 import com.mes.topdawg.common.data.repository.DogBreedsRepositoryInterface
+import com.mes.topdawg.common.state.UserProfileStateMachine
 import io.ktor.client.*
 import io.ktor.client.engine.*
 import io.ktor.client.plugins.*
@@ -40,6 +43,11 @@ fun commonModule(enableNetworkLogs: Boolean) = module {
     single { CoroutineScope(Dispatchers.Default + SupervisorJob()) }
 
     single<DogBreedsRepositoryInterface> { DogBreedsRepository() }
+    single<AuthRepository> { AuthRepositoryImpl() }
+}
+
+fun commonStateMachineModule() = module {
+    factory <>{ UserProfileStateMachine }
 }
 
 fun createJson() = Json { isLenient = true; ignoreUnknownKeys = true }

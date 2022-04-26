@@ -25,6 +25,7 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.mes.topdawg.android.ui.dog.breed.DogBreedsScreen
 import com.mes.topdawg.android.ui.dog.breeddetails.DogBreedDetailsScreen
 import com.mes.topdawg.android.ui.home.HomeScreen
+import com.mes.topdawg.android.ui.profile.login.WelcomeScreen
 import com.mes.topdawg.android.ui.search.SearchScreen
 import com.mes.topdawg.android.ui.theme.TopDawgTheme
 import com.mes.topdawg.android.ui.theme.orange200
@@ -47,6 +48,7 @@ sealed class Screen(val title: String) {
     object Search : Screen("Search")
     object DogBreeds : Screen("Breeds")
     object DogBreedDetails : Screen("BreedDetails")
+    object Welcome : Screen("Welcome")
 }
 
 data class BottomNavigationItem(
@@ -113,12 +115,12 @@ fun MainLayout() {
             }
         ) { paddingValues ->
 
-            AnimatedNavHost(navController, startDestination = Screen.Home.title) {
+            AnimatedNavHost(navController, startDestination = Screen.Welcome.title) {
                 composable(
                     route = Screen.Home.title,
                     exitTransition = {
                         slideOutHorizontally() +
-                            fadeOut(animationSpec = tween(1000))
+                                fadeOut(animationSpec = tween(1000))
                     },
                     popEnterTransition = {
                         slideInHorizontally()
@@ -135,7 +137,7 @@ fun MainLayout() {
                     route = Screen.Search.title,
                     exitTransition = {
                         slideOutHorizontally() +
-                            fadeOut(animationSpec = tween(1000))
+                                fadeOut(animationSpec = tween(1000))
                     },
                     popEnterTransition = {
                         slideInHorizontally()
@@ -152,7 +154,7 @@ fun MainLayout() {
                     route = Screen.DogBreeds.title,
                     enterTransition = {
                         slideInHorizontally() +
-                            fadeIn(animationSpec = tween(1000))
+                                fadeIn(animationSpec = tween(1000))
                     },
                     popExitTransition = {
                         slideOutHorizontally()
@@ -169,13 +171,29 @@ fun MainLayout() {
                     route = Screen.DogBreedDetails.title + "/{breedId}",
                     enterTransition = {
                         slideInHorizontally() +
-                            fadeIn(animationSpec = tween(1000))
+                                fadeIn(animationSpec = tween(1000))
                     },
                     popExitTransition = {
                         slideOutHorizontally()
                     }
                 ) {
                     DogBreedDetailsScreen()
+                }
+
+                composable(
+                    route = Screen.Welcome.title,
+                    exitTransition = {
+                        slideOutHorizontally() +
+                                fadeOut(animationSpec = tween(1000))
+                    },
+                    popEnterTransition = {
+                        slideInHorizontally()
+                    }
+                ) {
+                    WelcomeScreen(
+                        paddingValues = paddingValues,
+                        navController = navController
+                    )
                 }
             }
         }
